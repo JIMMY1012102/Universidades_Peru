@@ -17,7 +17,7 @@
         fn ($i) => in_array((int) $i->simulacro_id, $idsUndc, true)
     );
     $nombreEstudiante = trim($usuario->nombres.' '.($usuario->apellidos ?? ''));
-    $logoUndc = 'https://rest.perucris.pe/server/api/core/bitstreams/0f9f181e-fed0-44af-94ab-d4c394e5bbee/content';
+    $logoUndc = 'https://web.undc.edu.pe/wp-content/uploads/2026/04/Logo-UNDC_Horizontal_Letras-Blancas_Fondo-Transparente-1.png';
 @endphp
 
 <div class="ud-shell">
