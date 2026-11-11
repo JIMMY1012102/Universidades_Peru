@@ -9,6 +9,7 @@
     // Una sola plantilla para cinco áreas; los datos y la carrera vienen de MariaDB.
     $temaArea = config('panel_alumno.areas.'.$area->codigo);
     $rutaMascota = $temaArea['mascota_png'];
+    $tituloArea = $temaArea['titulo'] ?? $area->nombre;
     $nombreCompleto = trim($usuario->nombres.' '.($usuario->apellidos ?? ''));
     $iniciales = mb_strtoupper(mb_substr($usuario->nombres, 0, 1).mb_substr($usuario->apellidos ?? '', 0, 1));
     $primeraPalabra = explode(' ', trim($usuario->nombres))[0];
@@ -29,7 +30,7 @@
                 <span class="cni-alumno-marca-icon" aria-hidden="true"><img src="{{ asset('images/escudo-cni.png') }}" width="36" height="36" alt=""></span>
                 <span><strong>Simulador</strong><small>CNI · Imperial</small></span>
             </a>
-            <span class="cni-alumno-area-chip"><span aria-hidden="true">{{ $temaArea['icono'] }}</span> {{ $area->nombre }}</span>
+            <span class="cni-alumno-area-chip"><span aria-hidden="true">{{ $temaArea['icono'] }}</span> {{ $tituloArea }}</span>
             <nav class="cni-alumno-menu" aria-label="Navegación del alumno">
                 <a href="#perfil" class="is-active" aria-current="location"><span aria-hidden="true">♙</span> Mi perfil</a>
                 <a href="#progreso"><span aria-hidden="true">▤</span> Mi progreso</a>
@@ -68,7 +69,7 @@
                 <div class="cni-alumno-welcome">
                     <span class="cni-alumno-overline">TU ESPACIO DE PREPARACIÓN · ÁREA {{ $area->codigo }}</span>
                     <h1 id="bienvenida-titulo">¡Hola, {{ $primeraPalabra }}!</h1>
-                    <h2>Bienvenido a {{ $area->nombre }}</h2>
+                    <h2>Bienvenido a {{ $tituloArea }}</h2>
                     <p>{{ $temaArea['descripcion'] }}</p>
 
                     <div class="cni-alumno-exam-cta">

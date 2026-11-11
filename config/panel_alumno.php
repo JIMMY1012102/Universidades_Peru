@@ -8,22 +8,25 @@
 return [
     'areas' => [
         'A' => [
+            'titulo' => 'UNDC',
             'icono' => '✚',
-            'descripcion' => 'Cada respuesta te acerca a tu vocación de cuidar vidas.',
-            'lema' => 'Aprende hoy para transformar vidas mañana.',
-            'mascota_png' => 'images/mascotas/cni-mascota-salud.png',
+            'descripcion' => 'Prepárate para ingresar a la Universidad Nacional de Cañete.',
+            'lema' => 'Principio activo, innovador y humanista.',
+            'mascota_png' => 'images/mascotas/UNDC_LOGO.png',
         ],
         'B' => [
-            'icono' => '⚛',
-            'descripcion' => 'Experimenta, descubre y fortalece tus conocimientos científicos.',
-            'lema' => 'La curiosidad es el comienzo de todo descubrimiento.',
-            'mascota_png' => 'images/mascotas/cni-mascota-basicas.png',
+            'titulo' => 'UNI',
+            'icono' => '⚙',
+            'descripcion' => 'Prepárate para ingresar a la Universidad Nacional de Ingeniería.',
+            'lema' => 'Scientia et Labor: ciencia y trabajo para construir el Perú.',
+            'mascota_png' => 'images/mascotas/UNI_logo.png',
         ],
         'C' => [
+            'titulo' => 'Villarreal',
             'icono' => '⌘',
-            'descripcion' => 'Convierte tus conocimientos en soluciones que cambien el mundo.',
-            'lema' => 'Cada desafío es una oportunidad para innovar.',
-            'mascota_png' => 'images/mascotas/cni-mascota-ingenierias.png',
+            'descripcion' => 'Prepárate para ingresar a la Universidad Nacional Federico Villarreal.',
+            'lema' => 'Cada desafío es una oportunidad para avanzar.',
+            'mascota_png' => 'images/mascotas/villareal_logo.png',
         ],
         'D' => [
             'icono' => '▥',
@@ -32,10 +35,11 @@ return [
             'mascota_png' => 'images/mascotas/cni-mascota-economicas.png',
         ],
         'E' => [
+            'titulo' => 'San Marcos',
             'icono' => '✦',
-            'descripcion' => 'Comprende las ideas, la sociedad y los retos de nuestro tiempo.',
-            'lema' => 'El conocimiento abre caminos para transformar la sociedad.',
-            'mascota_png' => 'images/mascotas/cni-mascota-humanidades.png',
+            'descripcion' => 'Prepárate para ingresar a la Universidad Nacional Mayor de San Marcos.',
+            'lema' => 'Decana de América: la universidad más antigua del continente.',
+            'mascota_png' => 'images/mascotas/San_Marcos_logo.png',
         ],
     ],
 ];
