@@ -71,8 +71,11 @@
 
                 <div class="area-opcion__ilustracion" aria-hidden="true">
                     @if ($area->codigo === 'A')
-                        <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:22px;background:linear-gradient(145deg,#0d2b4e,#1b527d);border-radius:18px">
-                            <img src="https://web.undc.edu.pe/wp-content/uploads/2026/04/Logo-UNDC_Horizontal_Letras-Blancas_Fondo-Transparente-1.png" width="390" height="120" alt="" style="width:100%;max-width:390px;height:auto;max-height:100%;object-fit:contain">
+                        {{-- La segunda tarjeta (código A, antes Ciencias de la Salud) pertenece a UNDC. --}}
+                        <div class="area-opcion__undc-marca">
+                            <img src="{{ asset('images/undc/logo-undc.png') }}" width="220" height="220"
+                                 alt="" loading="eager" decoding="async">
+                            <span>UNIVERSIDAD NACIONAL DE CAÑETE</span>
                         </div>
                     @elseif (isset($mascotas[$area->codigo]))
                         @php
@@ -125,10 +128,10 @@
                         @endswitch
                     </span>
 
-                    <h2 id="area-titulo-{{ $area->id }}" title="{{ $area->nombre }}">{{ $presentacion['titulo'] }}</h2>
+                    <h2 id="area-titulo-{{ $area->id }}" title="{{ $presentacion['titulo'] }}">{{ $presentacion['titulo'] }}</h2>
                     <p class="area-opcion__descripcion">{{ $presentacion['descripcion'] }}</p>
                     <button class="area-opcion__seleccionar" type="submit"
-                            aria-label="Seleccionar {{ $area->nombre }}">
+                            aria-label="Seleccionar {{ $presentacion['titulo'] }}">
                         <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                              stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 12h16m-7-7 7 7-7 7"/>
