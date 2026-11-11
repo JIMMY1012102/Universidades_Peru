@@ -1,0 +1,78 @@
+/* Módulo exclusivamente UNDC; no modifica el diseño de las otras cuatro áreas. */
+body:has(.ud-shell)>header{display:none!important}
+body:has(.ud-shell)>main{max-width:none;margin:0;padding:0}
+body:has(.ud-shell){background:#f3f6fb}
+.ud-shell{--navy:#0d2b4e;--deep:#09213f;--accent:#ad7f1c;--blue:#2261a5;--muted:#64748b;--line:#e4e9f1;display:flex;min-height:100vh;font-family:Inter,"Segoe UI",Arial,sans-serif;color:#183250;background:#f3f6fb;font-size:14px;line-height:1.5}
+.ud-shell *{box-sizing:border-box}
+.ud-shell :where(h1,h2,h3,p){margin:0}
+.ud-shell a{text-decoration:none}
+.ud-shell a:focus-visible,.ud-shell button:focus-visible{outline:3px solid #ffbd3c;outline-offset:3px}
+.ud-sidebar{position:sticky;top:0;display:flex;flex-direction:column;width:258px;flex:0 0 258px;height:100vh;padding:27px 20px;background:linear-gradient(160deg,#102f52 0%,#0a2442 75%);color:white}
+.ud-brand{display:flex;align-items:center;gap:13px;color:white!important}
+.ud-brand img{width:56px;height:60px;object-fit:contain;background:#fff;border-radius:10px;padding:3px}
+.ud-brand strong{display:block;font-size:24px;font-weight:900;letter-spacing:.04em}
+.ud-brand small{display:block;color:#c3d0e4;font-size:11px;margin-top:1px}
+.ud-sidebar-label{font-size:10px;font-weight:800;letter-spacing:.12em;color:#91a9c5;margin:39px 0 13px 10px}
+.ud-nav{display:grid;gap:8px}
+.ud-nav a{padding:12px 13px;border-radius:11px;color:#d7e4f7;display:flex;align-items:center;gap:12px;font-weight:700;font-size:13px}
+.ud-nav a:hover,.ud-nav .ud-active{color:white;background:#ffffff1b}
+.ud-sidebar-bottom{margin-top:auto;border-top:1px solid #ffffff29;padding:20px 4px 0}
+.ud-sidebar-bottom p{font-size:12px;font-weight:800}
+.ud-sidebar-bottom small{display:block;font-size:10px;color:#9bb0cd;margin-top:7px}
+.ud-sidebar-bottom button{margin-top:18px;border:1px solid #7a91b1;background:transparent;color:#fff;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;width:100%;text-align:left}
+.ud-sidebar-bottom button:hover{background:#ffffff1b}
+.ud-main{flex:1;min-width:0}
+.ud-topbar{display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid var(--line);padding:22px clamp(20px,4vw,52px);min-height:104px}
+.ud-eyebrow{display:block;color:#a4741b;font-size:10px;font-weight:900;letter-spacing:.12em}
+.ud-topbar h1{font-size:26px;font-weight:850;color:var(--navy);margin-top:3px}
+.ud-avatar{background:#d9e9fa;color:#215389;font-weight:900;display:grid;place-items:center;width:42px;height:42px;border-radius:50%}
+.ud-content{width:min(1210px,100%);margin:0 auto;padding:27px clamp(20px,3.8vw,50px) 60px}
+.ud-message{margin-bottom:16px;border-radius:11px;border:1px solid #b9dac8;background:#e8f8ee;padding:12px 16px;color:#245d39}
+.ud-message-error{background:#fff2f2;border-color:#edcccc;color:#a33d3d}
+.ud-hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:25px;min-height:295px;padding:37px clamp(22px,4vw,52px);color:white;background:radial-gradient(circle at 92% 15%,#30628e 0,#164369 30%,transparent 50%),linear-gradient(110deg,#0c2a4f,#144779);border-radius:22px;box-shadow:0 15px 35px #0d2b4e1a}
+.ud-hero:after{position:absolute;content:"";right:-45px;top:-110px;width:355px;height:355px;border:1px solid #ffffff19;border-radius:50%}
+.ud-hero-text{position:relative;z-index:2;max-width:630px}
+.ud-pill{display:inline-block;background:#ffffff1f;border:1px solid #ffffff50;border-radius:30px;padding:6px 13px;color:#e4eefb;font-size:10px;font-weight:850;letter-spacing:.12em}
+.ud-hero h2{font-size:clamp(26px,3vw,42px);line-height:1.16;letter-spacing:-.03em;font-weight:900;max-width:540px;margin-top:17px}
+.ud-hero p{margin-top:13px;color:#d3e4f8;font-size:13px;max-width:525px}
+.ud-hero-link{display:inline-flex;align-items:center;gap:17px;margin-top:19px;background:#d5a342;color:#152c44!important;border-radius:10px;padding:11px 18px;font-weight:850;font-size:12px}
+.ud-hero-link:hover{background:#f0c566}
+.ud-hero-emblem{position:relative;z-index:1;flex:0 0 180px;text-align:center}
+.ud-hero-emblem img{width:164px;height:164px;object-fit:contain;filter:drop-shadow(0 4px 12px #081d2e61)}
+.ud-hero-emblem span{display:block;letter-spacing:.25em;font-size:17px;color:#d7bb6a;font-weight:900}
+.ud-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:20px 0 32px}
+.ud-stats>div{background:white;border:1px solid var(--line);border-radius:15px;padding:20px 22px;box-shadow:0 5px 18px #1e334c08}
+.ud-stats>div span,.ud-stats>div small{display:block;font-size:11px;color:var(--muted)}
+.ud-stats>div strong{display:block;font-size:31px;font-weight:900;color:#10345b;margin:7px 0 3px}
+.ud-section{margin-top:28px;scroll-margin-top:20px}
+.ud-section-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:16px}
+.ud-section-heading h2{font-size:23px;font-weight:900;letter-spacing:-.03em;color:#143859;margin-top:4px}
+.ud-count{background:#e7eef7;color:#355f89;padding:7px 11px;border-radius:20px;font-size:11px;font-weight:850}
+.ud-exams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}
+.ud-exam-card{border:1px solid #e3e9f3;border-radius:17px;background:#fff;padding:27px;box-shadow:0 6px 20px #1b3b6810}
+.ud-exam-card:hover{box-shadow:0 12px 30px #1b3b681d}
+.ud-exam-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ud-exam-symbol{display:grid;place-items:center;width:51px;height:51px;border-radius:13px;background:#e8f1fa;color:#174f86;font-size:19px;font-weight:900}
+.ud-exam-state{border-radius:25px;padding:6px 10px;background:#e7f5ed;color:#21704b;font-size:10px;font-weight:850}
+.ud-exam-card:has(.ud-disabled) .ud-exam-state{background:#fff0da;color:#8b6127}
+.ud-exam-card h3{margin-top:20px;font-size:24px;color:#153a60;font-weight:900}
+.ud-exam-card>p{margin-top:8px;color:var(--muted);font-size:12px;min-height:50px}
+.ud-exam-facts{display:flex;flex-wrap:wrap;gap:10px 16px;padding:15px 0;margin:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.ud-exam-facts span{font-size:11px;font-weight:700;color:#53708d}
+.ud-start{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:0;background:#174a7b;color:white;padding:13px 16px;border-radius:11px;font-size:13px;font-weight:850;cursor:pointer}
+.ud-start:hover{background:#0b3058}
+.ud-disabled{display:block;border-radius:11px;padding:13px 16px;background:#f1f4f8;color:#68768a;font-size:12px;font-weight:700}
+.ud-notice{font-size:11px;color:#73849b;margin-top:12px}
+.ud-history{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.ud-history-item{padding:16px 21px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:20px}
+.ud-history-item:last-child{border-bottom:0}
+.ud-history-item span:first-child{margin-right:auto}
+.ud-history-item strong,.ud-history-item small{display:block}
+.ud-history-item strong{font-size:13px;color:var(--navy)}
+.ud-history-item small{font-size:11px;color:#7186a0;margin-top:3px}
+.ud-history-score{color:#16456f;font-weight:900;font-size:13px}
+.ud-history-item a{font-size:12px;font-weight:850;color:#1d68ae}
+.ud-empty{padding:23px;color:#687c95;font-size:12px}
+@media(max-width:1000px){.ud-sidebar{width:218px;flex-basis:218px}.ud-hero-emblem{flex-basis:130px}.ud-hero-emblem img{width:120px;height:120px}}
+@media(max-width:760px){.ud-shell{display:block}.ud-sidebar{position:relative;width:100%;height:auto;padding:13px 20px;gap:8px}.ud-brand img{width:43px;height:43px}.ud-brand strong{font-size:18px}.ud-sidebar-label,.ud-sidebar-bottom{display:none}.ud-nav{display:flex;overflow-x:auto}.ud-nav a{white-space:nowrap;padding:8px;font-size:11px}.ud-topbar{min-height:72px;padding:18px 20px}.ud-topbar h1{font-size:21px}.ud-hero{padding:27px 22px;min-height:250px}.ud-hero-emblem{display:none}.ud-hero-text{max-width:none}.ud-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.ud-stats>div{padding:13px}.ud-exams{grid-template-columns:1fr}}
+@media(max-width:440px){.ud-stats{grid-template-columns:1fr}.ud-section-heading h2{font-size:19px}.ud-history-item{flex-wrap:wrap}}
