@@ -76,3 +76,47 @@ body:has(.ud-shell){background:#f3f6fb}
 @media(max-width:1000px){.ud-sidebar{width:218px;flex-basis:218px}.ud-hero-emblem{flex-basis:130px}.ud-hero-emblem img{width:120px;height:120px}}
 @media(max-width:760px){.ud-shell{display:block}.ud-sidebar{position:relative;width:100%;height:auto;padding:13px 20px;gap:8px}.ud-brand img{width:43px;height:43px}.ud-brand strong{font-size:18px}.ud-sidebar-label,.ud-sidebar-bottom{display:none}.ud-nav{display:flex;overflow-x:auto}.ud-nav a{white-space:nowrap;padding:8px;font-size:11px}.ud-topbar{min-height:72px;padding:18px 20px}.ud-topbar h1{font-size:21px}.ud-hero{padding:27px 22px;min-height:250px}.ud-hero-emblem{display:none}.ud-hero-text{max-width:none}.ud-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.ud-stats>div{padding:13px}.ud-exams{grid-template-columns:1fr}}
 @media(max-width:440px){.ud-stats{grid-template-columns:1fr}.ud-section-heading h2{font-size:19px}.ud-history-item{flex-wrap:wrap}}
+
+
+/* Páginas internas de UNDC: Inicio, Exámenes, Tipo A, Tipo B y Resultados. */
+.ud-shell .ud-screen[hidden]{display:none!important}
+.ud-screen{animation:ud-rise .18s ease-out}
+@keyframes ud-rise{from{opacity:.4;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.ud-shell .ud-hero{position:relative;background:#0c3055;min-height:335px;isolation:isolate}
+.ud-campus-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 48%;z-index:-2}
+.ud-shell .ud-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(100deg,#051d3eea 0%,#0c335bcc 45%,#1a446044 100%);z-index:-1}
+.ud-shell .ud-hero:after{display:none}
+.ud-hero-text{max-width:610px}
+.ud-shell .ud-hero-emblem{flex:0 0 145px;border-radius:16px;padding:14px;background:#ffffffea}
+.ud-hero-emblem img{width:115px;height:115px;object-fit:contain;filter:none}
+.ud-hero-emblem span{color:#174774}
+.ud-shell .ud-sidebar .ud-brand img{padding:5px;object-fit:contain}
+.ud-welcome-note{display:flex;align-items:center;gap:18px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:17px;box-shadow:0 5px 18px #1e334c08}
+.ud-welcome-note img{object-fit:contain;border-radius:8px;flex:none}
+.ud-welcome-note strong{font-size:15px;color:#143859}
+.ud-welcome-note p{font-size:12px;color:var(--muted);margin-top:3px}
+.ud-shell .ud-exams{margin-top:19px}
+.ud-back{display:inline-flex;gap:6px;margin:0 0 26px;color:#215c96!important;font-size:13px;font-weight:800}
+.ud-back:hover{text-decoration:underline}
+.ud-type-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(245px,1fr);gap:20px;align-items:start}
+.ud-type-courses,.ud-type-start{border-radius:17px;background:white;border:1px solid var(--line);padding:25px;box-shadow:0 6px 20px #1b3b6810}
+.ud-type-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.ud-type-summary>div{text-align:center;background:#f0f5fb;border-radius:12px;padding:16px 8px}
+.ud-type-summary strong,.ud-type-summary span{display:block}
+.ud-type-summary strong{font-size:28px;color:#153b67;font-weight:900}
+.ud-type-summary span{font-size:11px;color:#647993}
+.ud-type-courses h3{font-size:16px;margin:0 0 12px;color:#153b67}
+.ud-type-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 5px;border-bottom:1px solid #e9edf4;font-size:12px}
+.ud-type-row:last-child{border:0}
+.ud-type-row strong{color:#16568f;font-size:13px}
+.ud-type-start{position:sticky;top:20px;text-align:center}
+.ud-type-start img{width:115px;height:115px;object-fit:contain}
+.ud-type-start h3{margin:10px 0;font-size:19px;color:#143859}
+.ud-type-start p,.ud-type-start small{display:block;color:#647993;font-size:12px;margin:10px 0 19px}
+.ud-type-start .ud-start{margin-top:15px}
+.ud-type-start small{font-size:10px;margin-top:13px}
+.ud-shell .ud-screen .ud-start{color:#fff!important;text-align:center}
+.ud-shell .ud-page-heading{margin:10px 0 20px}
+.ud-shell .ud-page-heading h2{font-size:27px;font-weight:900;color:#143859}
+@media(max-width:930px){.ud-type-grid{grid-template-columns:1fr}.ud-type-start{position:static}.ud-campus-photo{object-position:center}}
+@media(max-width:650px){.ud-shell .ud-hero{min-height:320px}.ud-shell .ud-hero-emblem{display:none}.ud-hero-text{max-width:100%}.ud-type-summary strong{font-size:22px}.ud-welcome-note{padding:14px}}
