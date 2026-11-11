@@ -92,7 +92,7 @@
                             <p>Modelo de práctica para el proceso de admisión UNDC, con distribución por asignaturas.</p>
                             <div class="ud-exam-facts">
                                 <span>▤ {{ $examen['total_preguntas'] ?? 100 }} preguntas</span>
-                                <span>◷ {{ $examen['tiempo_limite'] ?? 180 }} min {{ $examen ? '' : '(previstos)' }}</span>
+                                <span>◷ {{ $examen['tiempo_limite'] ?? 60 }} min {{ $examen ? '' : '(previstos)' }}</span>
                                 <span>◇ 5 alternativas</span>
                             </div>
                             @if($examen)
