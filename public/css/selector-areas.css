@@ -445,3 +445,52 @@
 .area-opcion:focus-within .area-opcion__mascota img{
     transform:translateX(-50%);
 }
+
+
+/* Segunda tarjeta del selector: identidad UNDC, sin alterar B/C/D/E. */
+.area-opcion[data-area="A"] {
+    --arriba:#dbeaff;
+    --abajo:#6b97c0;
+    --panel-primario:#174874;
+    --panel-secundario:#092b50;
+    --acento:#c39a43;
+}
+.area-opcion__undc-marca {
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:18px 14px 34px;
+    background:radial-gradient(circle at 50% 35%,#ffffffeb,#e3ecf8 57%,#9ab5d1 100%);
+}
+.area-opcion__undc-marca img {
+    display:block;
+    width:min(82%,190px);
+    height:min(72%,190px);
+    object-fit:contain;
+    filter:drop-shadow(0 9px 12px #0c2a4e27);
+    transition:transform .2s ease;
+}
+.area-opcion[data-area="A"]:hover .area-opcion__undc-marca img,
+.area-opcion[data-area="A"]:focus-within .area-opcion__undc-marca img {
+    transform:scale(1.04);
+}
+.area-opcion__undc-marca span {
+    max-width:230px;
+    font-weight:900;
+    font-size:clamp(.56rem,.85vw,.8rem);
+    line-height:1.2;
+    text-align:center;
+    letter-spacing:.05em;
+    color:#12385e;
+}
+.area-opcion[data-area="A"] .area-opcion__icono {
+    color:#b98726;
+}
+@media(max-width:650px){
+    .area-opcion__undc-marca{padding:10px 10px 26px}
+    .area-opcion__undc-marca img{width:min(75%,125px)}
+}
