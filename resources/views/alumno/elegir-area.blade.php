@@ -73,9 +73,8 @@
                     @if ($area->codigo === 'A')
                         {{-- La segunda tarjeta (código A, antes Ciencias de la Salud) pertenece a UNDC. --}}
                         <div class="area-opcion__undc-marca">
-                            <img src="{{ asset('images/undc/logo-undc.png') }}" width="220" height="220"
+                            <img src="{{ asset('images/undc/logo-undc.png') }}" width="200" height="200"
                                  alt="" loading="eager" decoding="async">
-                            <span>UNIVERSIDAD NACIONAL DE CAÑETE</span>
                         </div>
                     @elseif (isset($mascotas[$area->codigo]))
                         @php
