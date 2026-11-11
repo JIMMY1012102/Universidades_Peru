@@ -128,7 +128,11 @@ class OrientacionController extends Controller
         }
         $intentos = $historial->paginate(10)->withQueryString()->fragment('historial');
 
-        return view('alumno.panel', [
+        // La primera tarjeta del selector es UNDC. Las otras cuatro áreas
+        // siguen usando el panel compartido sin ninguna modificación visual.
+        $vistaPanel = $area->codigo === 'A' ? 'alumno.undc.panel' : 'alumno.panel';
+
+        return view($vistaPanel, [
             'usuario' => $usuario,
             'area' => $area,
             'carrera' => $carrera,
