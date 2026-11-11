@@ -47,7 +47,7 @@ final class UndcExamenSeeder extends Seeder
 
                 $datos = [
                     // Parámetros PROVISIONALES de demostración; NO son reglas oficiales 2026-II.
-                    'tiempo_limite' => 180,
+                    'tiempo_limite' => 60,
                     'total_preguntas' => 100,
                     'cantidad_alternativas' => 5,
                     'puntaje_correcta' => 1.000,
