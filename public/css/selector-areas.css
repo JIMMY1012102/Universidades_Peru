@@ -494,3 +494,53 @@
     .area-opcion__undc-marca{padding:10px 10px 26px}
     .area-opcion__undc-marca img{width:min(75%,125px)}
 }
+
+
+/* Ajuste final de la tarjeta UNDC: insignia integrada, sin bloque blanco visible. */
+.area-opcion[data-area="A"] .area-opcion__ilustracion {
+    background:linear-gradient(155deg,#e7f2fb 0%,#cee3f3 62%,#9fc2df 100%);
+}
+.area-opcion[data-area="A"] .area-opcion__undc-marca {
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    padding:14px 18px 27px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:transparent;
+    overflow:hidden;
+}
+.area-opcion[data-area="A"] .area-opcion__undc-marca img {
+    width:min(100%,180px);
+    height:auto;
+    max-height:78%;
+    object-fit:contain;
+    /* El blanco del PNG se funde con el fondo azul claro sin alterar el logo de las otras tarjetas. */
+    mix-blend-mode:multiply;
+    filter:contrast(1.08) saturate(1.11);
+    transform:translateY(-9px);
+}
+.area-opcion[data-area="A"]:hover .area-opcion__undc-marca img,
+.area-opcion[data-area="A"]:focus-within .area-opcion__undc-marca img {
+    transform:translateY(-9px) scale(1.04);
+}
+.area-opcion[data-area="A"] .area-opcion__info {
+    padding-top:41px;
+    background:linear-gradient(180deg,#19507e,#092d53);
+}
+.area-opcion[data-area="A"] .area-opcion__info h2 {
+    font-size:clamp(1.08rem,1.6vw,1.52rem);
+    line-height:1.13;
+    letter-spacing:-.02em;
+}
+.area-opcion[data-area="A"] .area-opcion__descripcion {
+    font-size:clamp(.68rem,.9vw,.85rem);
+}
+@media(max-width:480px) {
+    .area-opcion[data-area="A"] .area-opcion__undc-marca img {
+        max-height:82%;
+        width:min(70%,195px);
+    }
+}
