@@ -13,7 +13,7 @@
     // Mascotas individuales con canal alfa (sin escenarios).
     $mascotas = [
         'B' => 'cni-mascota-basicas.png',
-        'A' => 'cni-mascota-salud.png',
+        // Área A se convertirá en la opción UNDC: no mostrar mascota ni pingüino.
         'C' => 'cni-mascota-ingenierias.png',
         'D' => 'cni-mascota-economicas.png',
         'E' => 'cni-mascota-humanidades.png',
@@ -25,8 +25,8 @@
             'descripcion' => 'Explora el mundo a través de la ciencia y el conocimiento.',
         ],
         'A' => [
-            'titulo' => 'Ciencias de la Salud',
-            'descripcion' => 'Vocación para cuidar vidas y transformar realidades.',
+            'titulo' => 'Universidad Nacional de Cañete',
+            'descripcion' => 'Simulador de admisión UNDC · Exámenes Tipo A y Tipo B.',
         ],
         'C' => [
             'titulo' => 'Ingenierías',
@@ -70,7 +70,11 @@
                 <input type="hidden" name="area_id" value="{{ $area->id }}">
 
                 <div class="area-opcion__ilustracion" aria-hidden="true">
-                    @if (isset($mascotas[$area->codigo]))
+                    @if ($area->codigo === 'A')
+                        <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;padding:22px;background:linear-gradient(145deg,#0d2b4e,#1b527d);border-radius:18px">
+                            <img src="https://web.undc.edu.pe/wp-content/uploads/2026/04/Logo-UNDC_Horizontal_Letras-Blancas_Fondo-Transparente-1.png" width="390" height="120" alt="" style="width:100%;max-width:390px;height:auto;max-height:100%;object-fit:contain">
+                        </div>
+                    @elseif (isset($mascotas[$area->codigo]))
                         @php
                             $imagenMascota = 'images/mascotas/'.$mascotas[$area->codigo];
                         @endphp
@@ -94,8 +98,8 @@
                                 </svg>
                                 @break
                             @case('A')
-                                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M3 17h6l4-8 5 15 4-7h7"/>
+                                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round">
+                                    <path d="M2 12L16 4l14 8-14 8L2 12Z"/><path d="M8 16v8c6 5 12 5 18 0v-8"/><path d="M30 12v11"/>
                                 </svg>
                                 @break
                             @case('C')
