@@ -47,8 +47,9 @@ class OrientacionAlumnoTest extends TestCase
         $this->post('/login', ['usuario' => 'primero', 'password' => 'ClaveCNI2026!'])
             ->assertRedirect(route('alumno.elegir-area'));
         $this->get(route('alumno.elegir-area'))->assertOk()
-            ->assertSee('Ingenierías')->assertSee('Ciencias Básicas')
-            ->assertSee('Humanidades y Ciencias Jurídicas y Sociales');
+            ->assertSee('¿A qué universidad deseas postular?')
+            ->assertSee('UNI')->assertSee('UNDC')->assertSee('Villarreal')->assertSee('San Marcos')
+            ->assertDontSee('Ciencias Económicas y de Gestión');
         $this->get(route('alumno.panel'))->assertRedirect(route('alumno.elegir-area'));
         $this->get('/panel')->assertRedirect(route('alumno.panel'));
     }

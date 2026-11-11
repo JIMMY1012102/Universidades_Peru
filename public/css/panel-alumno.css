@@ -3,10 +3,11 @@ body:has(.cni-alumno)>header{display:none!important}
 body:has(.cni-alumno)>main{max-width:none;margin:0;padding:0}
 body:has(.cni-alumno){background:#f8f9fe}
 .cni-alumno{--accent:#1575e8;--accent-dark:#0e4796;--navy:#14315c;--ink:#172b50;--muted:#71819c;--line:#e2eaf7;--pale:#eaf4ff;display:flex;min-height:100vh;color:var(--ink);background:#f8faff;font-family:Inter,'Segoe UI',Arial,sans-serif;font-size:14px;line-height:1.45}
-.cni-alumno[data-area="E"]{--accent:#9b3348;--accent-dark:#6c1c32;--navy:#671f30;--pale:#fff0f2}
+.cni-alumno[data-area="E"]{--accent:#b08414;--accent-dark:#7d5d0c;--navy:#5c4510;--pale:#fff9e6}
 .cni-alumno[data-area="D"]{--accent:#bd6f25;--accent-dark:#8b4e19;--navy:#5d3e32;--pale:#fff4e6}
-.cni-alumno[data-area="C"]{--accent:#155dc7;--accent-dark:#123d8c;--navy:#132a62;--pale:#e9f1ff}
-.cni-alumno[data-area="B"]{--accent:#198849;--accent-dark:#0b5f37;--navy:#164d37;--pale:#e7f8eb}
+.cni-alumno[data-area="C"]{--accent:#d0682a;--accent-dark:#9e4918;--navy:#5a2f16;--pale:#fff4ea}
+.cni-alumno[data-area="A"]{--accent:#468a33;--accent-dark:#2f6d24;--navy:#24461d;--pale:#f2faea}
+.cni-alumno[data-area="B"]{--accent:#b95955;--accent-dark:#8e3b3b;--navy:#6e2f31;--pale:#fdf4f0}
 .cni-alumno *{box-sizing:border-box}
 .cni-alumno :where(h1,h2,h3,p,blockquote){margin:0}
 .cni-alumno :where(button,select){font:inherit}
@@ -99,19 +100,19 @@ body:has(.cni-alumno){background:#f8f9fe}
 
 /* Estética de la única plantilla: cada usuario ve su área sin cambiar el HTML. */
 .cni-alumno[data-area="A"] .cni-alumno-banner{
-    background:linear-gradient(110deg,#effaff 0%,#d6f3ff 55%,#92caff 100%);
+    background:linear-gradient(110deg,#fbfef6 0%,#e8f5d8 55%,#c4e3a3 100%);
 }
 .cni-alumno[data-area="B"] .cni-alumno-banner{
-    background:linear-gradient(110deg,#f3fff0 0%,#d8f7cc 55%,#8ddd9c 100%);
+    background:linear-gradient(110deg,#fffbf8 0%,#fbeee7 55%,#f2cfc5 100%);
 }
 .cni-alumno[data-area="C"] .cni-alumno-banner{
-    background:linear-gradient(110deg,#eef5ff 0%,#d7e6ff 55%,#83b3f9 100%);
+    background:linear-gradient(110deg,#fffaf5 0%,#fde8d4 55%,#f6c497 100%);
 }
 .cni-alumno[data-area="D"] .cni-alumno-banner{
     background:linear-gradient(110deg,#fffaf0 0%,#ffebc1 55%,#ffcb70 100%);
 }
 .cni-alumno[data-area="E"] .cni-alumno-banner{
-    background:linear-gradient(110deg,#fff5f4 0%,#f9d8d3 55%,#e5a09b 100%);
+    background:linear-gradient(110deg,#fffdf4 0%,#fdf3d2 55%,#f3dd96 100%);
 }
 .cni-alumno-banner .cni-alumno-mascota{
     height:min(105%,360px);

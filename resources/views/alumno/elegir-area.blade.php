@@ -6,39 +6,37 @@
 
 @section('content')
 @php
-    // Solo cambia la presentación visual: los códigos A-E y los IDs reales se conservan.
-    // Orden de las tarjetas de izquierda a derecha según la referencia.
-    $ordenVisual = ['B' => 1, 'A' => 2, 'C' => 3, 'D' => 4, 'E' => 5];
-    $areasOrdenadas = $areas->sortBy(fn ($area) => $ordenVisual[$area->codigo] ?? 99);
-    // Mascotas individuales con canal alfa (sin escenarios).
+    // Solo cambia la presentación visual: los códigos y los IDs reales de MariaDB se conservan.
+    // Cada código se muestra como una universidad. El código D (Económicas) se oculta del selector.
+    $codigosOcultos = ['D'];
+    $ordenVisual = ['B' => 1, 'A' => 2, 'C' => 3, 'E' => 4];
+    $areasOrdenadas = $areas
+        ->reject(fn ($area) => in_array($area->codigo, $codigosOcultos, true))
+        ->sortBy(fn ($area) => $ordenVisual[$area->codigo] ?? 99);
+    // Logos institucionales.
     $mascotas = [
-        'B' => 'cni-mascota-basicas.png',
-        // Área A se convertirá en la opción UNDC: no mostrar mascota ni pingüino.
-        'C' => 'cni-mascota-ingenierias.png',
-        'D' => 'cni-mascota-economicas.png',
-        'E' => 'cni-mascota-humanidades.png',
+        'B' => 'UNI_logo.png',
+        'A' => 'UNDC_LOGO.png',
+        'C' => 'villareal_logo.png',
+        'E' => 'San_Marcos_logo.png',
     ];
 
     $presentaciones = [
         'B' => [
-            'titulo' => 'Ciencias Básicas',
-            'descripcion' => 'Explora el mundo a través de la ciencia y el conocimiento.',
+            'titulo' => 'UNI',
+            'descripcion' => 'Prepárate para la Universidad Nacional de Ingeniería.',
         ],
         'A' => [
-            'titulo' => 'Universidad Nacional de Cañete',
-            'descripcion' => 'Simulador de admisión UNDC · Exámenes Tipo A y Tipo B.',
+            'titulo' => 'UNDC',
+            'descripcion' => 'Prepárate para la Universidad Nacional de Cañete.',
         ],
         'C' => [
-            'titulo' => 'Ingenierías',
-            'descripcion' => 'Diseña soluciones para un mejor mañana.',
-        ],
-        'D' => [
-            'titulo' => 'Ciencias Económicas y de Gestión',
-            'descripcion' => 'Impulsa ideas para un mundo con más oportunidades.',
+            'titulo' => 'Villarreal',
+            'descripcion' => 'Prepárate para la Universidad Nacional Federico Villarreal.',
         ],
         'E' => [
-            'titulo' => 'Humanidades',
-            'descripcion' => 'Comprende, conecta y construye una sociedad más humana.',
+            'titulo' => 'San Marcos',
+            'descripcion' => 'Prepárate para la Universidad Nacional Mayor de San Marcos.',
         ],
     ];
 @endphp
@@ -51,11 +49,11 @@
 
     <div class="selector-page__encabezado">
         <p class="selector-page__eyebrow">PRIMERA VEZ <strong>EN EL SIMULADOR</strong></p>
-        <h1 id="selector-titulo">¿A qué área deseas postular?</h1>
-        <p class="selector-page__subtitulo">Selecciona una opción para personalizar tu panel de estudio</p>
+        <h1 id="selector-titulo">¿A qué universidad deseas postular?</h1>
+        <p class="selector-page__subtitulo">Elige tu universidad y personalizaremos tu panel de estudio para su examen de admisión</p>
     </div>
 
-    <div class="selector-page__grid areas-grid" role="group" aria-label="Cinco áreas de postulación">
+    <div class="selector-page__grid areas-grid" role="group" aria-label="Universidades de postulación">
         @forelse ($areasOrdenadas as $area)
             @php
                 $presentacion = $presentaciones[$area->codigo] ?? [
@@ -70,11 +68,7 @@
                 <input type="hidden" name="area_id" value="{{ $area->id }}">
 
                 <div class="area-opcion__ilustracion" aria-hidden="true">
-                    @if ($area->codigo === 'A')
-                        {{-- La segunda tarjeta (código A, antes Ciencias de la Salud) pertenece a UNDC. --}}
-                        {{-- Espacio reservado: el equipo colocará la insignia UNDC. --}}
-                        <div class="area-opcion__undc-marca" aria-hidden="true"></div>
-                    @elseif (isset($mascotas[$area->codigo]))
+                    @if (isset($mascotas[$area->codigo]))
                         @php
                             $imagenMascota = 'images/mascotas/'.$mascotas[$area->codigo];
                         @endphp
@@ -88,44 +82,15 @@
 
                 <div class="area-opcion__info">
                     <span class="area-opcion__icono" aria-hidden="true">
-                        @switch($area->codigo)
-                            @case('B')
-                                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2">
-                                    <ellipse cx="16" cy="16" rx="13" ry="5.8"/>
-                                    <ellipse cx="16" cy="16" rx="13" ry="5.8" transform="rotate(60 16 16)"/>
-                                    <ellipse cx="16" cy="16" rx="13" ry="5.8" transform="rotate(120 16 16)"/>
-                                    <circle cx="16" cy="16" r="2.5" fill="currentColor" stroke="none"/>
-                                </svg>
-                                @break
-                            @case('A')
-                                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round">
-                                    <path d="M2 12L16 4l14 8-14 8L2 12Z"/><path d="M8 16v8c6 5 12 5 18 0v-8"/><path d="M30 12v11"/>
-                                </svg>
-                                @break
-                            @case('C')
-                                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round">
-                                    <path d="M13 3h6l1 4.1 3 1.3 3.6-2.2 4.2 4.2-2.2 3.6 1.3 3 4.1 1v6l-4.1 1-1.3 3-3.6 2.2-4.2-4.2-3 1.3-1 4.1h-6l-1-4.1-3-1.3-3.6 2.2L.2 24l2.2-3.6-1.3-3L-3 16v-6l4.1-1 1.3-3 3.6-2.2L10.2 8l3-1.3z" transform="translate(3.8 1.5) scale(.75)"/>
-                                    <circle cx="16" cy="16" r="5"/>
-                                </svg>
-                                @break
-                            @case('D')
-                                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 28V16h5v12M14 28V11h5v17M24 28V6h5v22"/>
-                                    <path d="m4 13 9-7 6 3 9-7"/>
-                                </svg>
-                                @break
-                            @case('E')
-                                <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M16 8C12 5 8 5 3 6v19c5-1 9-1 13 2V8Zm0 0c4-3 8-3 13-2v19c-5-1-9-1-13 2"/>
-                                    <path d="M16 8v19"/>
-                                </svg>
-                                @break
-                            @default
-                                <span>{{ $area->codigo }}</span>
-                        @endswitch
+                        {{-- Ícono de universidad (edificio con columnas) --}}
+                        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 12 16 4l13 8H3Z"/>
+                            <path d="M7 12v11M12.5 12v11M19.5 12v11M25 12v11"/>
+                            <path d="M4 27h24M5 23.5h22"/>
+                        </svg>
                     </span>
 
-                    <h2 id="area-titulo-{{ $area->id }}" title="{{ $presentacion['titulo'] }}">{{ $presentacion['titulo'] }}</h2>
+                    <h2 id="area-titulo-{{ $area->id }}" title="{{ $presentacion['descripcion'] }}">{{ $presentacion['titulo'] }}</h2>
                     <p class="area-opcion__descripcion">{{ $presentacion['descripcion'] }}</p>
                     <button class="area-opcion__seleccionar" type="submit"
                             aria-label="Seleccionar {{ $presentacion['titulo'] }}">
@@ -137,7 +102,7 @@
                 </div>
             </form>
         @empty
-            <p class="selector-page__sin-areas">No hay áreas habilitadas. Comunícate con el administrador.</p>
+            <p class="selector-page__sin-areas">No hay universidades habilitadas. Comunícate con el administrador.</p>
         @endforelse
     </div>
 

@@ -1,4 +1,4 @@
-/* Selector de cinco áreas: mascotas independientes con fondo transparente.
+/* Selector de universidades: logos institucionales (UNI, UNDC, Villarreal, San Marcos).
    No depende de escenas ni del paisaje original; no afecta al panel del alumno. */
 
 .selector-areas-screen {
@@ -114,10 +114,10 @@
     z-index: 1;
     position: relative;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: clamp(9px, 1.2vw, 17px);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(12px, 1.6vw, 22px);
     align-items: stretch;
-    width: min(100%, 1510px);
+    width: min(100%, 1280px);
     margin: 0 auto;
 }
 
@@ -142,27 +142,27 @@
 }
 
 .area-opcion[data-area="B"] {
-    --arriba: #b9f69b;
-    --abajo: #64c976;
-    --panel-primario: #2ab848;
-    --panel-secundario: #15812d;
-    --acento: #16882f;
+    --arriba: #fdf3ee;
+    --abajo: #f0c9bf;
+    --panel-primario: #c96a66;
+    --panel-secundario: #a24a4a;
+    --acento: #a8484a;
 }
 
 .area-opcion[data-area="A"] {
-    --arriba: #91e8ff;
-    --abajo: #3caaff;
-    --panel-primario: #11b8f2;
-    --panel-secundario: #018add;
-    --acento: #08a6e6;
+    --arriba: #f4fbea;
+    --abajo: #cfe8b3;
+    --panel-primario: #4f9a3a;
+    --panel-secundario: #2f6d24;
+    --acento: #3b7f2c;
 }
 
 .area-opcion[data-area="C"] {
-    --arriba: #77b6ff;
-    --abajo: #276cdb;
-    --panel-primario: #1557bc;
-    --panel-secundario: #092c7f;
-    --acento: #0758d2;
+    --arriba: #fff5ec;
+    --abajo: #f8d2ae;
+    --panel-primario: #e2772e;
+    --panel-secundario: #b4521b;
+    --acento: #c25d1e;
 }
 
 .area-opcion[data-area="D"] {
@@ -174,11 +174,11 @@
 }
 
 .area-opcion[data-area="E"] {
-    --arriba: #ee9f91;
-    --abajo: #c85c54;
-    --panel-primario: #bc3029;
-    --panel-secundario: #871d20;
-    --acento: #a32424;
+    --arriba: #fffbea;
+    --abajo: #f6e3a1;
+    --panel-primario: #d4a72c;
+    --panel-secundario: #a87d12;
+    --acento: #9a7210;
 }
 
 .area-opcion:hover,
@@ -365,8 +365,8 @@
     }
 
     .selector-page__grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        max-width: 960px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: 720px;
     }
 
     .area-opcion { height: 530px; }
@@ -446,33 +446,22 @@
     transform:translateX(-50%);
 }
 
-/* Tarjeta UNDC (A): diseño visual sin insignia; el equipo agregará el logo. */
-.area-opcion[data-area="A"] {
-    --arriba:#dbeaff;
-    --abajo:#6b97c0;
-    --panel-primario:#174874;
-    --panel-secundario:#092b50;
-    --acento:#c39a43;
+/* Logos institucionales de cada universidad: completos y centrados, sin recorte. */
+.area-opcion .area-opcion__mascota{
+    inset:0 0 15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:12px 5% 4px;
 }
-.area-opcion[data-area="A"] .area-opcion__ilustracion {
-    background:linear-gradient(155deg,#e7f2fb 0%,#cee3f3 62%,#9fc2df 100%);
-}
-.area-opcion[data-area="A"] .area-opcion__undc-marca {
+.area-opcion .area-opcion__mascota img,
+.area-opcion:hover .area-opcion__mascota img,
+.area-opcion:focus-within .area-opcion__mascota img{
+    position:static;
     width:100%;
     height:100%;
-    background:transparent;
-}
-.area-opcion[data-area="A"] .area-opcion__info {
-    background:linear-gradient(180deg,#19507e,#092d53);
-}
-.area-opcion[data-area="A"] .area-opcion__info h2 {
-    font-size:clamp(1.08rem,1.6vw,1.52rem);
-    line-height:1.13;
-    letter-spacing:-.02em;
-}
-.area-opcion[data-area="A"] .area-opcion__descripcion {
-    font-size:clamp(.68rem,.9vw,.85rem);
-}
-.area-opcion[data-area="A"] .area-opcion__icono {
-    color:#b98726;
+    max-width:100%;
+    object-fit:contain;
+    object-position:center;
+    transform:none;
 }
