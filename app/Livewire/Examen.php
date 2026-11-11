@@ -57,7 +57,7 @@ class Examen extends Component
         $registro = $this->servicio()->obtenerPropio($intento, $this->usuarioId());
         if ($registro->estado !== 'en_curso') {
             // Livewire reemplaza redirect() durante mount; se responde con una redirección HTTP normal.
-            $this->avisar($this->mensajeCierre($registro));
+            $this->avisar($this->mensajeCierre($registro), (int) $registro->id);
             throw new HttpResponseException(new RedirectResponse(route('alumno.resultados', ['intento' => $intento])));
         }
         $this->intentoId = $registro->id;
@@ -197,14 +197,29 @@ class Examen extends Component
 
     private function salir(string $mensaje): void
     {
-        $this->avisar($mensaje);
+        $this->avisar($mensaje, $this->intentoId);
         $this->redirectRoute('alumno.resultados', ['intento' => $this->intentoId]);
         $this->skipRender();
     }
 
-    /** El panel muestra los avisos desde el bag de errores del layout común. */
-    private function avisar(string $mensaje): void
+    /**
+     * En la UNDC, el envío correcto se confirma con la página de resultados.
+     * No mostrar una alerta de error roja para una operación exitosa.
+     * El comportamiento de las otras áreas permanece intacto.
+     */
+    private function avisar(string $mensaje, int $intentoId): void
     {
+        $esUndc = DB::table('intentos as i')
+            ->join('simulacros as s', 's.id', '=', 'i.simulacro_id')
+            ->where('i.id', $intentoId)
+            ->where('i.usuario_id', $this->usuarioId())
+            ->where('s.nombre', 'like', 'UNDC - Admisión Ordinaria Tipo %')
+            ->exists();
+
+        if ($esUndc) {
+            return;
+        }
+
         session()->flash('errors', (new ViewErrorBag)->put('default', new MessageBag(['intento' => $mensaje])));
     }
 
