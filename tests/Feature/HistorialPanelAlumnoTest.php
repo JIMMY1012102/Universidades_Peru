@@ -16,7 +16,7 @@ class HistorialPanelAlumnoTest extends TestCase
     {
         config(['cni.alumno_areas_enabled' => true]);
         $this->seed(AreaPostulacionSeeder::class);
-        $area = DB::table('areas_postulacion')->where('codigo', 'B')->value('id');
+        $area = DB::table('areas_postulacion')->where('codigo', 'C')->value('id');
         $alumno = Usuario::create([
             'nombres' => 'Alumno', 'apellidos' => 'Historial', 'usuario' => 'historial',
             'password' => 'ClaveCNI2026!', 'activo' => true, 'rol' => 'estudiante',

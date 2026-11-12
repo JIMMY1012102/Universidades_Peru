@@ -30,6 +30,22 @@ class ExamenController extends Controller
         return redirect()->route('examen', $intento->id);
     }
 
+    /** Jornada UNI (1–3). El servidor valida el área B; si el banco no alcanza, vuelve al panel con el motivo. */
+    public function diaUni(Request $request, int $dia, ExamenIndependienteService $examenes): RedirectResponse
+    {
+        abort_unless($request->user('web')?->rol === 'estudiante', 403);
+        if ($request->user('web')->area_postulacion_id === null && $request->user('web')->carrera_id === null) {
+            return redirect()->route('alumno.elegir-area');
+        }
+        try {
+            $intento = $examenes->iniciarDiaUni($request->user('web'), $dia);
+        } catch (ValidationException $e) {
+            return redirect()->route('alumno.panel')->withErrors($e->errors());
+        }
+
+        return redirect()->route('examen', $intento->id);
+    }
+
     /** Reanuda el intento en curso del simulacro o inicia uno nuevo, y abre el examen. */
     public function iniciar(Request $request, int $simulacro, IntentoService $intentos): RedirectResponse
     {

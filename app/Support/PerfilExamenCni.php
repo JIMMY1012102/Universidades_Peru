@@ -47,6 +47,46 @@ final class PerfilExamenCni
             'LE' => 10, 'LI' => 6, 'PS' => 5, 'CV' => 5, 'HP' => 6, 'HU' => 6, 'GG' => 6, 'EC' => 4, 'FL' => 6, 'CG' => 5],
     ];
 
+    /**
+     * Formato UNI en tres jornadas independientes (solo área B).
+     * Cada día es una plantilla propia con 180 minutos; la calificación no cambia.
+     */
+    public const UNI_MINUTOS = 180;
+
+    public const UNI_DIAS = [
+        1 => [
+            'titulo' => 'Aptitud Académica y Humanidades',
+            'cuotas' => ['AM' => 30, 'AV' => 30, 'IN' => 5, 'LE' => 8, 'LI' => 5, 'HP' => 4, 'HU' => 4,
+                'GG' => 4, 'EC' => 3, 'FL' => 3, 'PS' => 2, 'CV' => 2],
+        ],
+        2 => [
+            'titulo' => 'Matemática',
+            'cuotas' => ['AR' => 10, 'AL' => 10, 'GE' => 10, 'TR' => 10],
+        ],
+        3 => [
+            'titulo' => 'Física y Química',
+            'cuotas' => ['FI' => 20, 'QU' => 20],
+        ],
+    ];
+
+    /** Nombre fijo de la plantilla de un día; permite reconocer el día de cada intento. */
+    public static function prefijoDiaUni(int $dia): string
+    {
+        return 'Examen UNI · Día '.$dia.' · ';
+    }
+
+    /** Día UNI (1–3) a partir del nombre del simulacro, o null si no es una jornada UNI. */
+    public static function diaUniDeNombre(?string $nombre): ?int
+    {
+        foreach (array_keys(self::UNI_DIAS) as $dia) {
+            if ($nombre !== null && str_starts_with($nombre, self::prefijoDiaUni($dia))) {
+                return $dia;
+            }
+        }
+
+        return null;
+    }
+
     // Orden fijo de cursos; las preguntas de cada curso se sortean por intento.
     public const ORDEN = [
         'AV', 'IN', 'AM',

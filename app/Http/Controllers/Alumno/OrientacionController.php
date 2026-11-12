@@ -9,6 +9,7 @@ use App\Models\Usuario;
 use App\Services\ResultadoService;
 use App\Services\SimulacroService;
 use App\Services\Alumno\DashboardEstudianteService;
+use App\Services\Alumno\PanelUniService;
 use App\Services\Alumno\ProgresoAlumnoService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -84,6 +85,16 @@ class OrientacionController extends Controller
         // KISS: el mismo panel funciona para A-E. Solo cambian identidad y datos del área.
         // No se reasigna carrera ni se cambia la selección persistida en MariaDB.
         abort_unless(config('panel_alumno.areas.'.$area->codigo), 404);
+
+        // UNI (área B): panel propio con el formato de examen en tres días.
+        if ($area->codigo === 'B') {
+            return view('alumno.uni.panel', [
+                'usuario' => $usuario,
+                'area' => $area,
+                'carrera' => $carrera,
+                'uni' => app(PanelUniService::class)->obtener($usuario),
+            ]);
+        }
 
         // No hace falta elegir carrera: el área guardada determina qué examen se ofrece.
         $simulacros = $this->simulacrosDelArea($usuario, $area, $carrera, $servicio);

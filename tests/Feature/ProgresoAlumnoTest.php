@@ -25,7 +25,7 @@ class ProgresoAlumnoTest extends TestCase
         return Usuario::create([
             'nombres' => $nombre, 'apellidos' => 'CNI', 'usuario' => $nombre,
             'password' => 'ClaveCNI2026!', 'activo' => true, 'rol' => 'estudiante',
-            'area_postulacion_id' => DB::table('areas_postulacion')->where('codigo', 'B')->value('id'),
+            'area_postulacion_id' => DB::table('areas_postulacion')->where('codigo', 'C')->value('id'),
         ]);
     }
 

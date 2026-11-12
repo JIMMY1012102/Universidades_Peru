@@ -78,6 +78,8 @@ Route::middleware(['auth:web', EnsureActiveUser::class, FeatureAlumnoAreas::clas
     Route::get('/alumno/examen/vista-previa', Examen::class)->name('examen.vacio');
     Route::post('/alumno/examen/iniciar', [ExamenController::class, 'independiente'])
         ->name('examen.independiente');
+    Route::post('/alumno/examen/uni/{dia}', [ExamenController::class, 'diaUni'])
+        ->whereIn('dia', ['1', '2', '3'])->name('examen.uni.dia');
     Route::post('/simulacros/{simulacro}/iniciar', [ExamenController::class, 'iniciar'])
         ->whereNumber('simulacro')->name('examen.iniciar');
     Route::get('/intentos/{intento}/examen', Examen::class)
