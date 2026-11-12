@@ -948,3 +948,15 @@ body:has(.cni-alumno){background:#f8f9fe}
         height:150px;
     }
 }
+.cni-unfv-selector {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 8px 0 12px;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #18334f;
+    font: inherit;
+}
