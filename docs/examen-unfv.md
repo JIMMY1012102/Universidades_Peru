@@ -27,7 +27,7 @@ Fuente de las cuotas: [Prospecto de Admisión UNFV 2026](https://www.unfv.edu.pe
 
 ## Uso
 
-El alumno elige Villarreal, selecciona su área académica en el panel y pulsa **Dar examen**. Las peticiones antiguas sin perfil usan Ingenierías y Arquitectura. El servidor valida el perfil y determina las cuotas, el área permitida y el tiempo; ignora cantidades enviadas por el navegador.
+El alumno elige Villarreal y pulsa **Comenzar examen**, sin seleccionar carrera ni área académica. El examen general de práctica conserva las cuotas vigentes de la plantilla por defecto (Ingenierías y Arquitectura); no se inventa una distribución oficial común a las cuatro áreas. La tabla anterior documenta las distribuciones oficiales de referencia. Las otras tres siguen disponibles internamente para validación del motor, pero no se ofrecen como opciones al alumno. La ruta web ignora perfiles y cantidades enviados por el navegador.
 
 Las nuevas plantillas UNFV tienen 90 minutos. Se conserva el sistema de puntaje existente: este cambio implementa la distribución, no la calificación oficial de la UNFV. Los perfiles del simulador siguen usando la autorización existente del código C; no se deduce el perfil UNFV de las antiguas carreras CNI.
 
