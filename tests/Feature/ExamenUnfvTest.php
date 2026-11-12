@@ -57,10 +57,8 @@ class ExamenUnfvTest extends TestCase
         $this->banco();
         foreach (PerfilExamenUnfv::CUOTAS as $perfil => $cuotas) {
             $alumno = $this->alumno();
-            $this->actingAs($alumno)->post(route('examen.independiente'), [
-                'perfil_unfv' => $perfil, 'total_preguntas' => 999, 'area_id' => 999,
-            ])->assertRedirect();
-            $intento = DB::table('intentos')->where('usuario_id', $alumno->id)->first();
+            $intento = app(ExamenIndependienteService::class)->iniciar($alumno, $perfil);
+            $this->actingAs($alumno);
             $this->assertNotNull($intento);
             $this->assertSame(50, (int) $intento->total_preguntas);
             $this->assertEquals(Carbon::parse($intento->fecha_inicio)->addMinutes(90), Carbon::parse($intento->fecha_limite));
@@ -109,13 +107,19 @@ class ExamenUnfvTest extends TestCase
         $this->assertSame($ids, app(IntentoService::class)->preguntas($primero->id)->pluck('id')->all());
     }
 
-    public function test_perfil_invalido_no_crea_plantillas_ni_intentos(): void
+    public function test_la_ruta_general_ignora_perfiles_y_cantidades_enviados_por_el_navegador(): void
     {
-        $this->actingAs($this->alumno())->post(route('examen.independiente'), ['perfil_unfv' => 'inventado'])
-            ->assertSessionHasErrors('perfil_unfv');
-        $this->post(route('examen.independiente'), ['perfil_unfv' => ['salud']])->assertSessionHasErrors('perfil_unfv');
-        $this->assertDatabaseCount('simulacros', 0);
-        $this->assertDatabaseCount('intentos', 0);
+        $this->banco();
+        $alumno = $this->alumno();
+        $this->actingAs($alumno)->post(route('examen.independiente'), [
+            'perfil_unfv' => ['inventado'], 'total_preguntas' => 999, 'area_id' => 999,
+        ])->assertRedirect();
+        $intento = DB::table('intentos')->where('usuario_id', $alumno->id)->first();
+        $this->assertSame(50, (int) $intento->total_preguntas);
+        $preguntas = app(IntentoService::class)->preguntas($intento->id);
+        foreach (PerfilExamenUnfv::CUOTAS['ingenierias'] as $prefijo => $cantidad) {
+            $this->assertCount($cantidad, $preguntas->whereIn('area', PerfilExamenUnfv::cursos($prefijo)));
+        }
     }
 
     public function test_banco_insuficiente_informa_el_curso_sin_crear_un_examen_parcial(): void
@@ -130,11 +134,12 @@ class ExamenUnfvTest extends TestCase
         $this->assertDatabaseCount('respuestas_estudiante', 0);
     }
 
-    public function test_solo_villarreal_muestra_el_selector_y_las_cincuenta_preguntas(): void
+    public function test_villarreal_ofrece_examen_general_sin_selector_de_carrera_o_area(): void
     {
         $this->actingAs($this->alumno())->get(route('alumno.panel'))->assertOk()
-            ->assertSee('50 preguntas')->assertSee('90 minutos')->assertSee('Área académica de la Villarreal')
-            ->assertSee('form="examen-independiente"', false)->assertSee('Humanidades, Ciencias Jurídicas y Sociales');
+            ->assertSee('50')->assertSee('90')->assertSee('examen general')
+            ->assertSee('form="examen-independiente"', false)->assertDontSee('name="perfil_unfv"', false)
+            ->assertDontSee('Área académica de la Villarreal');
         $this->actingAs($this->alumno('E'))->get(route('alumno.panel'))->assertOk()
             ->assertSee('100 preguntas')->assertDontSee('Área académica de la Villarreal');
     }
