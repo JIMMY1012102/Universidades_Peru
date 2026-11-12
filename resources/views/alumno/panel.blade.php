@@ -50,7 +50,7 @@
         <header class="cni-alumno-topbar">
             <div class="cni-alumno-top-title"><span class="cni-alumno-topicon" data-panel-header-icon aria-hidden="true">♙</span><span><strong data-panel-header-title>Mi perfil</strong></span></div>
             <div class="cni-alumno-top-actions">
-                <form method="POST" action="{{ route('examen.independiente') }}" class="cni-alumno-header-examen-form">
+                <form id="examen-independiente" method="POST" action="{{ route('examen.independiente') }}" class="cni-alumno-header-examen-form">
                     @csrf
                     <button type="submit" class="cni-alumno-header-examen" @disabled($esVistaPrevia)><span aria-hidden="true">▶</span> Dar examen</button>
                 </form>
@@ -63,6 +63,9 @@
                 <div class="cni-alumno-alert" role="status">Vista previa local · Sin inicio de sesión ni consultas a MySQL. Los indicadores están en cero porque no contienen datos ficticios.</div>
             @endif
             @if(session('status')) <div class="cni-alumno-alert cni-alumno-alert-ok" role="status">{{ session('status') }}</div> @endif
+            @if($area->codigo === 'C' && $errors->any())
+                <div class="cni-alumno-alert" role="alert">{{ $errors->first() }}</div>
+            @endif
 
             <section class="cni-alumno-vista cni-alumno-vista-perfil" id="perfil" data-panel-view="perfil" aria-label="Mi perfil">
                 <div class="cni-alumno-banner" aria-labelledby="bienvenida-titulo">
@@ -73,7 +76,18 @@
                     <p>{{ $temaArea['descripcion'] }}</p>
 
                     <div class="cni-alumno-exam-cta">
-                        <p>100 preguntas de tu área · 60 minutos · Preguntas aleatorias en cada nuevo intento.</p>
+                        @if($area->codigo === 'C')
+                            <p>50 preguntas según tu área académica · 90 minutos · Preguntas aleatorias en cada nuevo intento.</p>
+                            <label for="perfil-unfv">Área académica de la Villarreal</label>
+                            <select id="perfil-unfv" name="perfil_unfv" form="examen-independiente" class="cni-unfv-selector" @disabled($esVistaPrevia)>
+                                @foreach(\App\Support\PerfilExamenUnfv::NOMBRES as $codigoUnfv => $nombreUnfv)
+                                    <option value="{{ $codigoUnfv }}" @selected(old('perfil_unfv', 'ingenierias') === $codigoUnfv)>{{ $nombreUnfv }}</option>
+                                @endforeach
+                            </select>
+                            <p><a href="{{ \App\Support\PerfilExamenUnfv::FUENTE }}" target="_blank" rel="noopener noreferrer">Distribución del examen ordinario UNFV 2026 · Anexo 8, página 70</a></p>
+                        @else
+                            <p>100 preguntas de tu área · 60 minutos · Preguntas aleatorias en cada nuevo intento.</p>
+                        @endif
                     </div>
                 </div>
                 <div class="cni-alumno-banner-pattern" aria-hidden="true"></div>

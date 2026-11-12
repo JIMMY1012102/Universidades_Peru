@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Support\PerfilExamenCni;
+use App\Support\PerfilExamenUnfv;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -104,12 +105,17 @@ class IntentoService
             throw ValidationException::withMessages(['simulacro_id' => 'La distribución no coincide con el total de preguntas.']);
         }
         $seleccionadas = collect();
+        $esUnfv = PerfilExamenUnfv::esUnfv($simulacro->nombre);
         foreach ($cuotas as $cuota) {
             $cantidad = (int) $cuota->cantidad_preguntas;
+            $curso = DB::table('areas')->where('id', $cuota->area_id)->value('nombre');
+            $historiaUnfv = $esUnfv && in_array($curso, PerfilExamenUnfv::cursos('HP'), true);
             $preguntas = DB::table('preguntas as p')
                 ->join('temas as t', 't.id', '=', 'p.tema_id')
                 ->join('areas as a', 'a.id', '=', 't.area_id')
-                ->where('a.id', $cuota->area_id)
+                ->when($historiaUnfv,
+                    fn ($q) => $q->whereIn('a.nombre', PerfilExamenUnfv::cursos('HP')),
+                    fn ($q) => $q->where('a.id', $cuota->area_id))
                 ->where('p.activo', true)->where('t.activo', true)->where('a.activo', true)
                 ->when($cuota->nivel !== 'mixto', fn ($q) => $q->where('p.nivel', $cuota->nivel))
                 ->whereNotIn('p.id', $seleccionadas->pluck('id')->all())
@@ -127,7 +133,9 @@ class IntentoService
             $seleccionadas = $seleccionadas->concat($preguntas);
         }
         if ($ordenPorCurso) {
-            return $seleccionadas->sortBy(fn ($p) => PerfilExamenCni::posicion($p->asignatura))->values();
+            return $seleccionadas->sortBy(fn ($p) => $esUnfv
+                ? PerfilExamenUnfv::posicion($p->asignatura)
+                : PerfilExamenCni::posicion($p->asignatura))->values();
         }
         // Orden de bloques documentado; sorteo independiente dentro de cada bloque.
         $grupos = $seleccionadas->groupBy('bloque');
