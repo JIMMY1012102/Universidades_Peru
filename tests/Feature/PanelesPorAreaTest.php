@@ -46,8 +46,14 @@ class PanelesPorAreaTest extends TestCase
 
         foreach ($temas as $codigo => $tema) {
             $this->actingAs($this->estudiante($codigo), 'web');
-            $respuesta = $this->get(route('alumno.panel'))->assertOk()
-                ->assertSee('data-area="'.$codigo.'"', false)
+            $respuesta = $this->get(route('alumno.panel'))->assertOk();
+            // La UNDC (A) tiene su panel propio con otra estructura.
+            if ($codigo === 'A') {
+                $respuesta->assertViewIs('alumno.undc.panel')->assertSee('undc-panel.css');
+
+                continue;
+            }
+            $respuesta->assertSee('data-area="'.$codigo.'"', false)
                 ->assertSee($tema['descripcion'])
                 ->assertSee('aria-controls="cni-alumno-sidebar"', false)
                 ->assertSee('data-sidebar-toggle', false);
@@ -84,8 +90,10 @@ class PanelesPorAreaTest extends TestCase
                 'carrera_id' => null,
             ]);
 
-            $this->get(route('alumno.panel'))->assertOk()
-                ->assertSee('data-area="'.$codigo.'"', false);
+            $panel = $this->get(route('alumno.panel'))->assertOk();
+            $codigo === 'A'
+                ? $panel->assertViewIs('alumno.undc.panel')
+                : $panel->assertSee('data-area="'.$codigo.'"', false);
         }
     }
 
@@ -161,7 +169,7 @@ class PanelesPorAreaTest extends TestCase
 
     public function test_menu_usa_mi_perfil_mi_progreso_historial_para_cada_area(): void
     {
-        foreach (['A', 'C', 'D', 'E'] as $codigo) {
+        foreach (['C', 'D', 'E'] as $codigo) {
             $this->actingAs($this->estudiante($codigo), 'web');
             $html = $this->get(route('alumno.panel'))->assertOk()->getContent();
 

@@ -66,7 +66,7 @@ class ExamenUniTest extends TestCase
 
     public function test_otras_areas_conservan_su_panel(): void
     {
-        $this->actingAs($this->alumno('A'), 'web')
+        $this->actingAs($this->alumno('C'), 'web')
             ->get(route('alumno.panel'))
             ->assertOk()
             ->assertViewIs('alumno.panel');
