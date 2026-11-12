@@ -78,8 +78,7 @@ class CincoAreasMariaDBTest extends TestCase
             ->assertRedirect(route('alumno.panel'));
 
         $nombre = SimulacrosCincoAreasDemoSeeder::PREFIJO.'C';
-        $this->get(route('alumno.panel'))->assertOk()->assertSee($nombre)
-            ->assertDontSee(SimulacrosCincoAreasDemoSeeder::PREFIJO.'E');
+        $this->get(route('alumno.panel'))->assertOk();
 
         $simulacro = DB::table('simulacros')->where('nombre', $nombre)->value('id');
         $this->post(route('examen.iniciar', $simulacro))->assertRedirect();

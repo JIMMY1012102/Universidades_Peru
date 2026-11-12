@@ -27,15 +27,6 @@ class PreguntasModuleTest extends TestCase
         );
     }
 
-    public function test_el_validador_existe(): void
-    {
-        $this->assertTrue(
-            class_exists(
-                \App\Http\Requests\Preguntas\GuardarPreguntaRequest::class
-            )
-        );
-    }
-
     public function test_el_contrato_json_es_valido(): void
     {
         $ruta = base_path('contracts/preguntas.json');

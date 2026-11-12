@@ -48,13 +48,14 @@ class RecorridoSimulacroTest extends TestCase
         ]);
         $this->ingresar('docente');
         for ($i = 1; $i <= 3; $i++) {
-            $this->preguntas[] = $this->postJson('/api/preguntas', [
+            // Las preguntas se registran con el mismo servicio que usa el banco del administrador.
+            $this->preguntas[] = app(\App\Services\PreguntaService::class)->guardar([
                 'tema_id' => $this->tema, 'enunciado' => "Pregunta de integración {$i}",
                 'nivel' => 'basico', 'solucion' => 'Explicación reservada para después del examen.',
                 'alternativas' => array_map(fn ($letra) => [
                     'letra' => $letra, 'texto' => "Opción {$letra}", 'es_correcta' => $letra === 'A',
                 ], ['A', 'B', 'C', 'D']),
-            ])->assertCreated()->json('data.id');
+            ], $this->docente->id);
         }
         $this->simulacro = $this->postJson('/api/simulacros', [
             'nombre' => 'Simulacro de integración', 'tiempo_limite' => 30, 'total_preguntas' => 3,
@@ -247,7 +248,8 @@ class RecorridoSimulacroTest extends TestCase
         $this->ingresar('docente');
         $pregunta = $this->getJson('/api/preguntas/'.$this->preguntas[0])->assertOk()->json('data');
         $pregunta['enunciado'] = 'Intento de cambiar una pregunta usada';
-        $this->putJson('/api/preguntas/'.$this->preguntas[0], $pregunta)->assertUnprocessable();
+        // La API ya no permite editar preguntas.
+        $this->putJson('/api/preguntas/'.$this->preguntas[0], $pregunta)->assertMethodNotAllowed();
         $this->putJson('/api/simulacros/'.$this->simulacro, [
             'nombre' => 'Configuración cambiada', 'tiempo_limite' => 5, 'total_preguntas' => 3,
             'fecha_inicio' => now()->subHour()->format('Y-m-d H:i:s'),

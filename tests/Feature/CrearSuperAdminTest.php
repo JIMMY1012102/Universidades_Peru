@@ -26,10 +26,11 @@ class CrearSuperAdminTest extends TestCase
         $this->assertTrue(Hash::check('ContraseñaUnicaDePrueba!2026', $usuario->password));
         $this->assertNotSame('ContraseñaUnicaDePrueba!2026', $usuario->password);
 
+        // El inicio de administración lleva directo al banco de preguntas.
         $this->actingAs($usuario, 'web')
             ->get(route('admin.inicio'))
-            ->assertOk()
-            ->assertSee('Superadministrador');
+            ->assertRedirect(route('admin.subtemas.index'));
+        $this->get(route('admin.subtemas.index'))->assertOk()->assertSee('Banco de preguntas');
     }
 
     public function test_segunda_ejecucion_no_duplica_ni_cambia_credenciales(): void

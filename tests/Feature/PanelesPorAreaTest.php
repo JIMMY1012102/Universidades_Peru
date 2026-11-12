@@ -46,19 +46,25 @@ class PanelesPorAreaTest extends TestCase
 
         foreach ($temas as $codigo => $tema) {
             $this->actingAs($this->estudiante($codigo), 'web');
-            $this->get(route('alumno.panel'))
-                ->assertOk()
-                ->assertSee('panel-alumno.css')
+            $respuesta = $this->get(route('alumno.panel'))->assertOk()
                 ->assertSee('data-area="'.$codigo.'"', false)
                 ->assertSee($tema['descripcion'])
-                ->assertSee($tema['lema'])
-                ->assertSee('Iniciar Simulador CNI')
+                ->assertSee('aria-controls="cni-alumno-sidebar"', false)
+                ->assertSee('data-sidebar-toggle', false);
+
+            // La UNI (B) tiene su panel de tres días; las demás comparten la plantilla general.
+            if ($codigo === 'B') {
+                $respuesta->assertViewIs('alumno.uni.panel')->assertSee('panel-uni.css');
+
+                continue;
+            }
+            $respuesta->assertViewIs('alumno.panel')
+                ->assertSee('panel-alumno.css')
+                ->assertSee('Dar examen')
                 ->assertSee('Mascota del área de')
                 ->assertSee('href="#perfil"', false)
                 ->assertSee('href="#progreso"', false)
-                ->assertSee('href="#historial"', false)
-                ->assertSee('aria-controls="cni-alumno-sidebar"', false)
-                ->assertSee('data-sidebar-toggle', false);
+                ->assertSee('href="#historial"', false);
         }
     }
 
@@ -126,40 +132,36 @@ class PanelesPorAreaTest extends TestCase
         $this->assertStringContainsString('id="perfil"', $html);
     }
 
-    public function test_mi_perfil_abre_de_entrada_con_solo_portada_y_dos_tarjetas(): void
+    public function test_mi_perfil_abre_de_entrada_con_portada_y_datos_del_alumno(): void
     {
-        $this->actingAs($this->estudiante('B'), 'web');
+        $this->actingAs($this->estudiante('C'), 'web');
         $html = $this->get(route('alumno.panel'))->assertOk()->getContent();
 
         $this->assertStringContainsString('id="perfil" data-panel-view="perfil"', $html);
         $this->assertSame(1, preg_match_all('/class="cni-alumno-banner"/', $html));
-        $this->assertSame(1, preg_match_all('/class="cni-alumno-progress-card"/', $html));
-        $this->assertSame(1, preg_match_all('/class="cni-alumno-streak-card"/', $html));
+        $this->assertStringContainsString('Datos del alumno', $html);
         $this->assertStringContainsString('href="#perfil" class="is-active"', $html);
-        $this->assertStringNotContainsString('cni-alumno-topics', $html);
         $this->assertStringContainsString('id="progreso" data-panel-view="progreso"', $html);
-        $this->assertStringContainsString('id="intentos" data-panel-view="intentos"', $html);
         $this->assertStringContainsString('id="historial" data-panel-view="historial"', $html);
         $this->assertMatchesRegularExpression('/id="progreso"[^>]*hidden>/', $html);
-        $this->assertMatchesRegularExpression('/id="intentos"[^>]*hidden>/', $html);
         $this->assertMatchesRegularExpression('/id="historial"[^>]*hidden>/', $html);
+        $this->assertStringNotContainsString('data-panel-view="intentos"', $html);
         $this->assertStringContainsString('const mostrarSeccion =', $html);
     }
 
-    public function test_la_pantalla_de_intentos_conserva_examenes_y_eleccion_de_carrera(): void
+    public function test_el_panel_ofrece_dar_examen_del_area(): void
     {
         $this->actingAs($this->estudiante('E'), 'web');
         $html = $this->get(route('alumno.panel'))->assertOk()->getContent();
 
-        $this->assertStringContainsString('Mis intentos · Iniciar Simulador CNI', $html);
-        $this->assertStringContainsString(route('alumno.carrera.guardar'), $html);
-        $this->assertStringContainsString('Carrera de interés', $html);
+        $this->assertStringContainsString(route('examen.independiente'), $html);
+        $this->assertStringContainsString('Dar examen', $html);
         $this->assertStringContainsString('Mi perfil', $html);
     }
 
     public function test_menu_usa_mi_perfil_mi_progreso_historial_para_cada_area(): void
     {
-        foreach (['A', 'B', 'C', 'D', 'E'] as $codigo) {
+        foreach (['A', 'C', 'D', 'E'] as $codigo) {
             $this->actingAs($this->estudiante($codigo), 'web');
             $html = $this->get(route('alumno.panel'))->assertOk()->getContent();
 
@@ -167,8 +169,7 @@ class PanelesPorAreaTest extends TestCase
             $this->assertMatchesRegularExpression('/href="#progreso"[^>]*>.*?Mi progreso/s', $html);
             $this->assertMatchesRegularExpression('/href="#historial"[^>]*>.*?Historial/s', $html);
             $this->assertStringContainsString('data-panel-view="progreso"', $html);
-            $this->assertStringContainsString('Aún no hay intentos calificados', $html);
-            $this->assertStringContainsString('data-go-panel="#intentos"', $html);
+            $this->assertStringContainsString('Completa tu primer simulacro para ver tu progreso.', $html);
             $this->assertStringNotContainsString('href="#intentos"', $html);
         }
     }

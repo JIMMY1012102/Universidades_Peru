@@ -34,7 +34,7 @@ class AuthModuleTest extends TestCase
         $this->assertAuthenticatedAs($usuario, 'web');
         $this->assertNotSame($anterior, session()->getId());
         $this->assertDatabaseCount('personal_access_tokens', 0);
-        $this->get('/alumno/elegir-area')->assertOk()->assertSee('¿A qué área deseas postular?');
+        $this->get('/alumno/elegir-area')->assertOk()->assertSee('¿A qué universidad deseas postular?');
     }
 
     public function test_login_json_usa_la_misma_sesion_sin_emitir_tokens(): void
@@ -139,7 +139,8 @@ class AuthModuleTest extends TestCase
         }
         $this->getJson('/api/intentos/'.$intento)->assertNotFound();
         $this->getJson('/api/resultados/'.$intento)->assertForbidden();
-        $this->postJson('/api/preguntas', [])->assertForbidden();
+        // Las preguntas ya no se crean por la API (se importan desde el panel del administrador).
+        $this->postJson('/api/preguntas', [])->assertMethodNotAllowed();
         $this->postJson('/api/simulacros', [])->assertForbidden();
         $this->assertAuthenticatedAs($usuario, 'web');
     }
@@ -151,7 +152,7 @@ class AuthModuleTest extends TestCase
 
     public function test_endpoints_de_modulos_conservan_web_csrf_y_guard_unico(): void
     {
-        foreach (['/api/preguntas', '/api/simulacros', '/api/intentos', '/api/resultados/calificar'] as $uri) {
+        foreach (['/api/simulacros', '/api/intentos', '/api/resultados/calificar'] as $uri) {
             $ruta = Route::getRoutes()->match(Request::create($uri, 'POST'));
             $middleware = $ruta->gatherMiddleware();
             $this->assertContains('web', $middleware);

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Preguntas\GuardarPreguntaRequest;
 use App\Services\PreguntaService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -80,41 +79,6 @@ public function show(int $id, Request $request): JsonResponse
 
     
 
-
-    public function store(
-        GuardarPreguntaRequest $request
-    ): JsonResponse {
-        $id = $this->service->guardar(
-            $request->validated(),
-            $request->user()->id
-        );
-
-        return response()->json([
-            'success' => true,
-            'data' => ['id' => $id],
-            'message' => 'Pregunta registrada correctamente',
-        ], 201);
-    }
-
-    public function update(
-        GuardarPreguntaRequest $request,
-        int $id
-    ): JsonResponse {
-        $actualizada = $this->service->actualizar(
-            $id,
-            $request->validated()
-        );
-
-        if (!$actualizada) {
-            return $this->noEncontrada();
-        }
-
-        return response()->json([
-            'success' => true,
-            'data' => ['id' => $id],
-            'message' => 'Pregunta actualizada correctamente',
-        ]);
-    }
 
 public function destroy(int $id, Request $request): JsonResponse
 {

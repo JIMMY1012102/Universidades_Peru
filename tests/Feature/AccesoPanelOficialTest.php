@@ -65,11 +65,8 @@ class AccesoPanelOficialTest extends TestCase
         $alumno = $this->usuario('estudiante', 'B');
         $simulacro = $this->publicarSimulacroPara('B');
 
-        $this->actingAs($alumno, 'web')->get(route('alumno.panel'))
-            ->assertOk()
-            ->assertSee('Dar examen')
-            ->assertSee(route('examen.iniciar', ['simulacro' => $simulacro]), false)
-            ->assertSee(ExamenDemoSeeder::SIMULACRO);
+        // El panel ya no lista simulacros publicados; el backend sigue permitiendo iniciarlos.
+        $this->actingAs($alumno, 'web')->get(route('alumno.panel'))->assertOk();
 
         $respuesta = $this->post(route('examen.iniciar', ['simulacro' => $simulacro]));
         $intento = DB::table('intentos')->where('usuario_id', $alumno->id)->first();
@@ -91,9 +88,7 @@ class AccesoPanelOficialTest extends TestCase
         $simulacro = $this->publicarSimulacroPara('B');
         $alumno = $this->usuario('estudiante', 'E');
 
-        $this->actingAs($alumno, 'web')->get(route('alumno.panel'))
-            ->assertOk()
-            ->assertSee('Aún no hay simulacros disponibles para tu área.');
+        $this->actingAs($alumno, 'web')->get(route('alumno.panel'))->assertOk();
 
         $this->post(route('examen.iniciar', ['simulacro' => $simulacro]))
             ->assertSessionHasErrors();
@@ -106,8 +101,8 @@ class AccesoPanelOficialTest extends TestCase
         $admin = $this->usuario('admin');
         $this->actingAs($admin, 'web')
             ->get(route('admin.inicio'))
-            ->assertOk()->assertSee('Panel del administrador')
-            ->assertSee('Banco de preguntas');
+            ->assertRedirect(route('admin.subtemas.index'));
+        $this->get(route('admin.subtemas.index'))->assertOk()->assertSee('Banco de preguntas');
 
         $estudiante = $this->usuario('estudiante');
         $this->actingAs($estudiante, 'web')

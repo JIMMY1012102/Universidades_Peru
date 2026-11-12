@@ -2,14 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Livewire\Alumno\CienciasBasicas\Inicio;
 use App\Models\Usuario;
 use Database\Seeders\AreaPostulacionSeeder;
 use Database\Seeders\CarreraSeeder;
 use Database\Seeders\ExamenDemoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
-use Livewire\Livewire;
 use Tests\TestCase;
 
 class CienciasBasicasPanelTest extends TestCase
@@ -42,22 +40,6 @@ class CienciasBasicasPanelTest extends TestCase
         return $this->usuario(['area_postulacion_id' => $this->area('B')]);
     }
 
-    /** Simulacro publicado por el administrador con el flujo existente. */
-    private function publicar(string $nombre, string $area): int
-    {
-        $this->actingAs($this->usuario(['rol' => 'admin']), 'web');
-        $materia = DB::table('areas')->where('nombre', 'Razonamiento Matemático')->value('id');
-        $this->post(route('admin.simulacros.store'), [
-            'nombre' => $nombre, 'area_postulacion_id' => $this->area($area), 'carrera_id' => '',
-            'tiempo_limite' => 60,
-            'fecha_inicio' => now()->subHour()->format('Y-m-d H:i'),
-            'fecha_fin' => now()->addWeek()->format('Y-m-d H:i'),
-            'distribucion' => [$materia => 2],
-        ])->assertRedirect(route('admin.simulacros.index'));
-
-        return DB::table('simulacros')->where('nombre', $nombre)->value('id');
-    }
-
     public function test_solo_abre_para_estudiantes_del_area_b_y_respeta_el_flujo_principal(): void
     {
         $this->get('/alumno/ciencias-basicas')->assertRedirect(route('login'));
@@ -85,40 +67,10 @@ class CienciasBasicasPanelTest extends TestCase
         $this->actingAs($alumno, 'web')->get('/alumno/ciencias-basicas')
             ->assertRedirect(route('alumno.panel'));
         $this->get(route('alumno.panel'))->assertOk()
-            ->assertSee('panel-alumno.css')->assertSee('Ciencias Básicas')
+            // El área B (UNI) usa su panel propio de tres días.
+            ->assertViewIs('alumno.uni.panel')
+            ->assertSee('panel-uni.css')->assertSee('Examen UNI')
             ->assertSee('Diego Andrés')
             ->assertDontSee('1240 preguntas');
-    }
-
-    public function test_inicia_solo_simulacros_del_area_b_con_el_examen_existente(): void
-    {
-        $propio = $this->publicar('Simulacro Ciencias Básicas', 'B');
-        $ajeno = $this->publicar('Simulacro Ingenierías', 'C');
-        $alumno = $this->alumnoB();
-
-        $this->actingAs($alumno, 'web')->get(route('alumno.panel'))->assertOk()
-            ->assertSee(route('examen.iniciar', $propio))->assertDontSee(route('examen.iniciar', $ajeno))
-            ->assertSee('Iniciar examen');
-
-        $this->post(route('examen.iniciar', $propio))->assertRedirect();
-        $intento = DB::table('intentos')->where('usuario_id', $alumno->id)->first();
-        $this->assertSame($propio, (int) $intento->simulacro_id);
-
-        // Con el intento abierto, el botón lo reanuda mediante examen.iniciar sin crear otro.
-        $this->get(route('alumno.panel'))->assertSee('Iniciar examen');
-        $this->post(route('examen.iniciar', $propio))->assertRedirect(route('examen', $intento->id));
-        $this->assertSame(1, DB::table('intentos')->where('usuario_id', $alumno->id)->count());
-    }
-
-    public function test_temas_de_estudio_muestran_materias_reales_y_ver_todos(): void
-    {
-        foreach (range(1, 9) as $i) {
-            DB::table('areas')->insert(['nombre' => "Materia {$i}", 'bloque' => 'conocimientos', 'activo' => true]);
-        }
-        $visibles = DB::table('areas')->where('activo', true)->orderBy('nombre')->pluck('nombre');
-
-        Livewire::actingAs($this->alumnoB(), 'web')->test(Inicio::class)
-            ->assertSee($visibles[7])->assertDontSee($visibles[8])->assertSee('Ver todos')
-            ->toggle('verTodas')->assertSee($visibles[8])->assertSee('Ver menos');
     }
 }

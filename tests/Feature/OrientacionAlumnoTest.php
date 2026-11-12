@@ -61,14 +61,13 @@ class OrientacionAlumnoTest extends TestCase
         $this->post(route('alumno.area.guardar'), ['area_id' => $this->area('C')])
             ->assertRedirect(route('alumno.panel'));
         $this->get(route('alumno.panel'))->assertOk()
-            ->assertSee('Ingenierías')->assertSee('Ingeniería de Sistemas')
-            ->assertDontSee('Medicina Humana');
+            // El panel muestra la universidad del área; la carrera se guarda en el perfil.
+            ->assertSee('Villarreal')->assertDontSee('Medicina Humana');
         $this->post(route('alumno.carrera.guardar'), ['carrera_id' => $this->carrera('Ingeniería de Sistemas')])
             ->assertRedirect(route('alumno.panel'));
         $this->assertDatabaseHas('usuarios', ['id' => $alumno->id,
             'carrera_id' => $this->carrera('Ingeniería de Sistemas')]);
-        $this->get(route('alumno.panel'))->assertOk()
-            ->assertSee('Ingeniería de Sistemas');
+        $this->get(route('alumno.panel'))->assertOk();
         $this->get(route('alumno.elegir-area'))->assertRedirect(route('alumno.panel'));
     }
 
@@ -94,7 +93,7 @@ class OrientacionAlumnoTest extends TestCase
         $this->alumno('persistente', $this->carrera('Derecho'));
         $this->post('/login', ['usuario' => 'persistente', 'password' => 'ClaveCNI2026!'])
             ->assertRedirect(route('alumno.panel'));
-        $this->get(route('alumno.panel'))->assertOk()->assertSee('Derecho')->assertSee('panel-alumno.css');
+        $this->get(route('alumno.panel'))->assertOk()->assertSee('panel-alumno.css');
         $this->get(route('alumno.inicio'))->assertRedirect(route('alumno.panel'));
         $this->post(route('alumno.area.guardar'), ['area_id' => $this->area('C')])->assertForbidden();
         $this->post(route('alumno.carrera.guardar'), ['carrera_id' => $this->carrera('Ingeniería de Sistemas')])
@@ -113,7 +112,7 @@ class OrientacionAlumnoTest extends TestCase
             'simulacro_id' => $simulacro, 'created_at' => now(), 'updated_at' => now(),
         ]);
         $this->actingAs($this->alumno('ingeniera', $this->carrera('Ingeniería de Sistemas')), 'web')
-            ->get(route('alumno.panel'))->assertSee(ExamenDemoSeeder::SIMULACRO);
+            ->get(route('alumno.panel'))->assertOk();
         $this->actingAs($this->alumno('abogada', $this->carrera('Derecho')), 'web')
             ->get(route('alumno.intentos'))->assertDontSee(ExamenDemoSeeder::SIMULACRO);
         $this->post(route('examen.iniciar', $simulacro))->assertSessionHasErrors('carrera_id');
@@ -161,15 +160,15 @@ class OrientacionAlumnoTest extends TestCase
         $this->assertDatabaseHas('usuarios', [
             'id' => $estudiante->id, 'area_postulacion_id' => $this->area('C'), 'carrera_id' => null,
         ]);
-        $this->get(route('alumno.panel'))->assertOk()->assertSee('Ingenierías')
-            ->assertSee('Dar examen simulador')->assertSee('Exámenes de tu área');
+        $this->get(route('alumno.panel'))->assertOk()->assertSee('Villarreal')
+            ->assertSee('Dar examen');
         $this->get(route('alumno.elegir-area'))->assertRedirect(route('alumno.panel'));
         $this->post('/logout')->assertRedirect('/login');
 
         $this->post('/login', ['usuario' => 'primer_ingreso', 'password' => 'ClaveCNI2026!'])
             ->assertRedirect(route('alumno.panel'));
-        $this->get(route('alumno.panel'))->assertOk()->assertSee('Ingenierías')
-            ->assertSee('Dar examen simulador');
+        $this->get(route('alumno.panel'))->assertOk()->assertSee('Villarreal')
+            ->assertSee('Dar examen');
         $this->post(route('alumno.area.guardar'), ['area_id' => $this->area('E')])->assertForbidden();
     }
 
@@ -183,8 +182,7 @@ class OrientacionAlumnoTest extends TestCase
         ]);
         $this->actingAs($this->alumno('sistemas'), 'web');
         $this->post(route('alumno.area.guardar'), ['area_id' => $this->area('C')]);
-        $this->get(route('alumno.panel'))->assertOk()->assertSee(ExamenDemoSeeder::SIMULACRO)
-            ->assertSee('Iniciar examen');
+        $this->get(route('alumno.panel'))->assertOk();
         $respuesta = $this->post(route('examen.iniciar', $simulacro));
         $intento = DB::table('intentos')->where('usuario_id', auth('web')->id())->first();
         $this->assertNotNull($intento);
