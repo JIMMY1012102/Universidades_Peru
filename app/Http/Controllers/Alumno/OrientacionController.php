@@ -139,7 +139,11 @@ class OrientacionController extends Controller
         }
         $intentos = $historial->paginate(10)->withQueryString()->fragment('historial');
 
-        return view('alumno.panel', [
+        // La primera tarjeta del selector es UNDC. Las otras cuatro áreas
+        // siguen usando el panel compartido sin ninguna modificación visual.
+        $vistaPanel = $area->codigo === 'A' ? 'alumno.undc.panel' : 'alumno.panel';
+
+        return view($vistaPanel, [
             'usuario' => $usuario,
             'area' => $area,
             'carrera' => $carrera,
@@ -241,12 +245,52 @@ class OrientacionController extends Controller
     public function resultados(Request $request, int $intento, ResultadoService $resultados): View
     {
         $usuario = $this->estudiante($request);
-        DB::table('intentos')->where('id', $intento)
-            ->where('usuario_id', $usuario->id)->firstOrFail();
 
-        return view('alumno.resultados', [
+        // Autorizar por propietario ANTES de obtener cualquier solución o clave.
+        $intentoActual = DB::table('intentos as i')
+            ->leftJoin('simulacros as s', 's.id', '=', 'i.simulacro_id')
+            ->where('i.id', $intento)
+            ->where('i.usuario_id', $usuario->id)
+            ->select('i.id', 's.nombre as simulacro_nombre')
+            ->firstOrFail();
+
+        // El servicio rechaza los intentos sin finalizar o todavía sin calificación.
+        $resultado = $resultados->mostrar($intento);
+
+        if (! str_starts_with((string) ($intentoActual->simulacro_nombre ?? ''), 'UNDC - Admisión Ordinaria Tipo ')) {
+            return view('alumno.resultados', [
+                'usuario' => $usuario,
+                'resultado' => $resultado,
+            ]);
+        }
+
+        // Las soluciones sólo se consultan después de la validación de finalización.
+        // Se incluyen también las preguntas que el postulante dejó en blanco.
+        $preguntas = DB::table('respuestas_estudiante as re')
+            ->join('preguntas as p', 'p.id', '=', 're.pregunta_id')
+            ->join('temas as t', 't.id', '=', 'p.tema_id')
+            ->join('areas as a', 'a.id', '=', 't.area_id')
+            ->where('re.intento_id', $intento)
+            ->orderBy('re.orden')
+            ->select(
+                're.orden', 're.alternativa_id', 're.estado_respuesta',
+                'p.id as pregunta_id', 'p.enunciado', 'p.imagen', 'p.solucion',
+                'a.nombre as asignatura'
+            )
+            ->get();
+
+        $alternativas = DB::table('alternativas')
+            ->whereIn('pregunta_id', $preguntas->pluck('pregunta_id'))
+            ->orderBy('letra')
+            ->get(['id', 'pregunta_id', 'letra', 'texto', 'imagen', 'es_correcta'])
+            ->groupBy('pregunta_id');
+
+        return view('alumno.undc.resultados', [
             'usuario' => $usuario,
-            'resultado' => $resultados->mostrar($intento),
+            'resultado' => $resultado,
+            'simulacroNombre' => $intentoActual->simulacro_nombre,
+            'preguntas' => $preguntas,
+            'alternativasPorPregunta' => $alternativas,
         ]);
     }
 }
