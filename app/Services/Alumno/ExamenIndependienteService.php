@@ -5,6 +5,7 @@ namespace App\Services\Alumno;
 use App\Models\Usuario;
 use App\Services\IntentoService;
 use App\Support\PerfilExamenCni;
+use App\Support\PerfilExamenUnfv;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -13,11 +14,22 @@ class ExamenIndependienteService
 {
     public function __construct(private readonly IntentoService $intentos) {}
 
-    public function iniciar(Usuario $usuario): object
+    public function iniciar(Usuario $usuario, string $perfilUnfv = 'ingenierias'): object
     {
-        return DB::transaction(function () use ($usuario) {
+        return DB::transaction(function () use ($usuario, $perfilUnfv) {
             [$perfil, $area] = $this->perfilYArea($usuario);
             abort_unless(isset(PerfilExamenCni::DISTRIBUCION[$area->codigo]), 403);
+
+            if ($area->codigo === 'C') {
+                if (! isset(PerfilExamenUnfv::CUOTAS[$perfilUnfv])) {
+                    throw ValidationException::withMessages(['perfil_unfv' => 'Selecciona un área académica de la UNFV.']);
+                }
+                $cuotas = array_filter(PerfilExamenUnfv::CUOTAS[$perfilUnfv]);
+                $version = substr(hash('sha256', json_encode([$cuotas, PerfilExamenUnfv::MINUTOS, 5])), 0, 10);
+                $nombre = 'Examen UNFV 2026 · '.PerfilExamenUnfv::NOMBRES[$perfilUnfv].' · '.$version;
+
+                return $this->abrirIntento($perfil, $area, $nombre, $cuotas, PerfilExamenUnfv::MINUTOS);
+            }
 
             $cuotas = PerfilExamenCni::DISTRIBUCION[$area->codigo];
             // Una configuración nueva obtiene otra plantilla; no altera exámenes anteriores.
@@ -76,9 +88,13 @@ class ExamenIndependienteService
             }
         } else {
             $asignaturas = DB::table('areas')->where('activo', true)->pluck('id', 'nombre');
+            $esUnfv = PerfilExamenUnfv::esUnfv($nombre);
+            $idsCuotas = [];
             foreach ($cuotas as $prefijo => $cantidad) {
                 $curso = PerfilExamenCni::CURSOS[$prefijo][0];
-                if (! isset($asignaturas[$curso])) {
+                $cursos = $esUnfv ? PerfilExamenUnfv::cursos($prefijo) : [$curso];
+                $idsCuotas[$prefijo] = collect($cursos)->map(fn ($nombreCurso) => $asignaturas[$nombreCurso] ?? null)->filter()->first();
+                if ($idsCuotas[$prefijo] === null) {
                     throw ValidationException::withMessages([
                         'preguntas' => 'El banco del área '.$area->codigo.' aún no está completo: falta '.$curso.'.',
                     ]);
@@ -99,13 +115,13 @@ class ExamenIndependienteService
                 'simulacro_id' => $simulacroId, 'area_postulacion_id' => $area->id,
                 'created_at' => $ahora, 'updated_at' => $ahora,
             ]);
-            foreach (PerfilExamenCni::ORDEN as $prefijo) {
+            foreach ($esUnfv ? array_keys($cuotas) : PerfilExamenCni::ORDEN as $prefijo) {
                 if (! isset($cuotas[$prefijo])) {
                     continue;
                 }
                 DB::table('simulacro_area')->insert([
                     'simulacro_id' => $simulacroId,
-                    'area_id' => $asignaturas[PerfilExamenCni::CURSOS[$prefijo][0]],
+                    'area_id' => $idsCuotas[$prefijo],
                     'nivel' => 'mixto', 'cantidad_preguntas' => $cuotas[$prefijo],
                     'created_at' => $ahora, 'updated_at' => $ahora,
                 ]);
