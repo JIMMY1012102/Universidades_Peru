@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/panel-alumno.css') }}?v={{ filemtime(public_path('css/panel-alumno.css')) }}">
+@if(isset($area) && $area->codigo === 'C')
+<link rel="stylesheet" href="{{ asset('css/panel-unfv.css') }}?v={{ filemtime(public_path('css/panel-unfv.css')) }}">
+@endif
 @endpush
 @section('content')
 @php
@@ -16,6 +19,7 @@
     $seccionAlumno = $esVistaPrevia ? null : $usuario->seccion;
 @endphp
 <div class="cni-alumno" data-area="{{ $area->codigo }}" id="inicio">
+    @if($area->codigo === 'C')<a class="unfv-skip" href="#unfv-main">Saltar al contenido</a>@endif
     <button type="button" class="cni-alumno-sidebar-toggle"
             data-sidebar-toggle aria-controls="cni-alumno-sidebar"
             aria-expanded="true" aria-label="Cerrar menú lateral">
@@ -58,16 +62,16 @@
             </div>
         </header>
 
-        <main class="cni-alumno-content">
+        <main class="cni-alumno-content" @if($area->codigo === 'C') id="unfv-main" tabindex="-1" @endif>
             @if($esVistaPrevia)
                 <div class="cni-alumno-alert" role="status">Vista previa local · Sin inicio de sesión ni consultas a MySQL. Los indicadores están en cero porque no contienen datos ficticios.</div>
             @endif
             @if(session('status')) <div class="cni-alumno-alert cni-alumno-alert-ok" role="status">{{ session('status') }}</div> @endif
-            @if($area->codigo === 'C' && $errors->any())
-                <div class="cni-alumno-alert" role="alert">{{ $errors->first() }}</div>
-            @endif
 
             <section class="cni-alumno-vista cni-alumno-vista-perfil" id="perfil" data-panel-view="perfil" aria-label="Mi perfil">
+                @if($area->codigo === 'C')
+                    @include('alumno.unfv.perfil')
+                @else
                 <div class="cni-alumno-banner" aria-labelledby="bienvenida-titulo">
                 <div class="cni-alumno-welcome">
                     <span class="cni-alumno-overline">TU ESPACIO DE PREPARACIÓN · ÁREA {{ $area->codigo }}</span>
@@ -76,18 +80,7 @@
                     <p>{{ $temaArea['descripcion'] }}</p>
 
                     <div class="cni-alumno-exam-cta">
-                        @if($area->codigo === 'C')
-                            <p>50 preguntas según tu área académica · 90 minutos · Preguntas aleatorias en cada nuevo intento.</p>
-                            <label for="perfil-unfv">Área académica de la Villarreal</label>
-                            <select id="perfil-unfv" name="perfil_unfv" form="examen-independiente" class="cni-unfv-selector" @disabled($esVistaPrevia)>
-                                @foreach(\App\Support\PerfilExamenUnfv::NOMBRES as $codigoUnfv => $nombreUnfv)
-                                    <option value="{{ $codigoUnfv }}" @selected(old('perfil_unfv', 'ingenierias') === $codigoUnfv)>{{ $nombreUnfv }}</option>
-                                @endforeach
-                            </select>
-                            <p><a href="{{ \App\Support\PerfilExamenUnfv::FUENTE }}" target="_blank" rel="noopener noreferrer">Distribución del examen ordinario UNFV 2026 · Anexo 8, página 70</a></p>
-                        @else
-                            <p>100 preguntas de tu área · 60 minutos · Preguntas aleatorias en cada nuevo intento.</p>
-                        @endif
+                        <p>100 preguntas de tu área · 60 minutos · Preguntas aleatorias en cada nuevo intento.</p>
                     </div>
                 </div>
                 <div class="cni-alumno-banner-pattern" aria-hidden="true"></div>
@@ -106,6 +99,7 @@
                         <div><dt>Sección</dt><dd>{{ $seccionAlumno?->nombre ?? 'No asignada' }}</dd></div>
                     </dl>
                 </section>
+                @endif
             </section>
 
             <section class="cni-alumno-vista cni-alumno-vista-progreso" id="progreso" data-panel-view="progreso" aria-labelledby="progreso-titulo" hidden>
@@ -128,7 +122,8 @@
     const toggle = panel.querySelector('[data-sidebar-toggle]');
     const backdrop = panel.querySelector('[data-sidebar-backdrop]');
     const links = [...sidebar.querySelectorAll('.cni-alumno-menu a')];
-    const mobile = window.matchMedia('(max-width: 680px)');
+    const esUnfv = panel.dataset.area === 'C';
+    const mobile = window.matchMedia(esUnfv ? '(max-width: 900px)' : '(max-width: 680px)');
     let abierto = !mobile.matches;
 
     const actualizar = () => {
@@ -139,11 +134,23 @@
         toggle.querySelector('.cni-alumno-sidebar-toggle-icon').textContent = abierto ? '❮' : '☰';
         backdrop.hidden = !mobile.matches || !abierto;
         sidebar.inert = !abierto;
+        if (esUnfv) {
+            panel.classList.toggle('unfv-menu-modal', mobile.matches && abierto);
+            panel.querySelector('.cni-alumno-workspace').inert = mobile.matches && abierto;
+            if (mobile.matches && abierto) {
+                sidebar.setAttribute('role', 'dialog');
+                sidebar.setAttribute('aria-modal', 'true');
+            } else {
+                sidebar.removeAttribute('role');
+                sidebar.removeAttribute('aria-modal');
+            }
+        }
     };
 
     toggle.addEventListener('click', () => {
         abierto = !abierto;
         actualizar();
+        if (esUnfv && mobile.matches && abierto) links[0]?.focus();
     });
     backdrop.addEventListener('click', () => {
         abierto = false;
@@ -151,6 +158,16 @@
         toggle.focus();
     });
     document.addEventListener('keydown', (evento) => {
+        if (esUnfv && mobile.matches && abierto && evento.key === 'Tab') {
+            const controles = [toggle, ...sidebar.querySelectorAll('a[href], button:not([disabled])')];
+            const primero = controles[0];
+            const ultimo = controles[controles.length - 1];
+            if (evento.shiftKey && document.activeElement === primero) {
+                evento.preventDefault(); ultimo.focus();
+            } else if (!evento.shiftKey && document.activeElement === ultimo) {
+                evento.preventDefault(); primero.focus();
+            }
+        }
         if (evento.key === 'Escape' && mobile.matches && abierto) {
             abierto = false;
             actualizar();

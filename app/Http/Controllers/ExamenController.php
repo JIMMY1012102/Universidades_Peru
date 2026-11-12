@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Services\IntentoService;
 use App\Services\Alumno\ExamenIndependienteService;
-use App\Support\PerfilExamenUnfv;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\Rule;
 
 class ExamenController extends Controller
 {
@@ -19,11 +17,8 @@ class ExamenController extends Controller
         if ($request->user('web')->area_postulacion_id === null && $request->user('web')->carrera_id === null) {
             return redirect()->route('alumno.elegir-area');
         }
-        $datos = $request->validate([
-            'perfil_unfv' => ['sometimes', 'required', Rule::in(array_keys(PerfilExamenUnfv::NOMBRES))],
-        ]);
         try {
-            $intento = $examenes->iniciar($request->user('web'), $datos['perfil_unfv'] ?? 'ingenierias');
+            $intento = $examenes->iniciar($request->user('web'));
         } catch (ValidationException $e) {
             if (! array_key_exists('preguntas', $e->errors())) {
                 throw $e;

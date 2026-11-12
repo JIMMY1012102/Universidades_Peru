@@ -1,0 +1,178 @@
+/* Villarreal only: the shared panels retain their existing presentation. */
+.cni-alumno[data-area="C"] {
+    --accent: #b94d20;
+    --accent-dark: #923b17;
+    --navy: #192e42;
+    --ink: #203348;
+    --muted: #657485;
+    --line: #e5e9ee;
+    --pale: #fff1e7;
+    background: #f6f7fa;
+    font-family: Inter, 'Segoe UI', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+}
+.cni-alumno[data-area="C"] :where(button, a, input, select) { -webkit-tap-highlight-color: transparent; }
+.cni-alumno[data-area="C"] :where(button, select, input):focus-visible,
+.cni-alumno[data-area="C"] a:focus-visible { outline: 3px solid #ae451b; outline-offset: 4px; }
+.cni-alumno[data-area="C"] :where(button):disabled { opacity: .5; cursor: not-allowed; }
+.cni-alumno[data-area="C"] .cni-alumno-sidebar {
+    width: 236px;
+    flex-basis: 236px;
+    padding: 24px 16px;
+    background: #192e42;
+    border-right: 1px solid #ffffff0d;
+}
+.cni-alumno[data-area="C"].is-sidebar-collapsed .cni-alumno-sidebar { width: 0; flex-basis: 0; padding-inline: 0; }
+.cni-alumno[data-area="C"] .cni-alumno-sidebar-top { padding-top: 64px; }
+.cni-alumno[data-area="C"] .cni-alumno-marca { margin: 0 0 26px; padding: 0 8px; }
+.cni-alumno[data-area="C"] .cni-alumno-marca-icon { background: #fff; border-radius: 12px; }
+.cni-alumno[data-area="C"] .cni-alumno-marca small { color: #b6c5d3; }
+.cni-alumno[data-area="C"] .cni-alumno-area-chip { padding: 12px; margin-bottom: 22px; background: #ffffff0b; border: 1px solid #ffffff1a; font-size: 13px; }
+.cni-alumno[data-area="C"] .cni-alumno-area-chip span { color: #ffae7c; }
+.cni-alumno[data-area="C"] .cni-alumno-menu { gap: 8px; }
+.cni-alumno[data-area="C"] .cni-alumno-menu a { min-height: 48px; border-radius: 11px; font-size: 14px; font-weight: 600; color: #c6d2df; }
+.cni-alumno[data-area="C"] .cni-alumno-menu a.is-active { color: #fff; background: #b94d20; box-shadow: 0 5px 15px #00000015; }
+.cni-alumno[data-area="C"] .cni-alumno-menu a:hover { color: #fff; background: #ffffff15; }
+.cni-alumno[data-area="C"] .cni-alumno-menu a.is-active:hover { background: #a54119; }
+.cni-alumno[data-area="C"] .cni-alumno-salir { display: block; width: 100%; min-height: 46px; color: #d4dee8; background: #ffffff08; border: 1px solid #ffffff24; border-radius: 10px; text-align: left; }
+.cni-alumno[data-area="C"] .cni-alumno-sidebar-toggle { top: 20px; left: 22px; height: 42px; background: #263d52; border: 1px solid #ffffff2b; box-shadow: none; }
+.cni-alumno[data-area="C"] .cni-alumno-workspace { background: #f6f7fa; }
+.cni-alumno[data-area="C"] .cni-alumno-topbar { display: flex; flex-direction: row; min-height: 84px; height: auto; padding: 16px 32px; gap: 20px; border-bottom: 1px solid var(--line); background: #ffffff; }
+.cni-alumno[data-area="C"].is-sidebar-collapsed .cni-alumno-topbar { padding-left: 132px; }
+.cni-alumno[data-area="C"] .cni-alumno-top-title strong { font-size: 21px; letter-spacing: -.025em; color: var(--ink); }
+.cni-alumno[data-area="C"] .cni-alumno-topicon { background: var(--pale); color: #a74620; }
+.cni-alumno[data-area="C"] .cni-alumno-top-actions { min-width: 0; gap: 20px; }
+.cni-alumno[data-area="C"] .cni-alumno-header-examen { min-height: 44px; padding: 10px 16px; background: #fff; border: 1px solid #d9e0e7; box-shadow: none; color: var(--ink); font-size: 13px; }
+.cni-alumno[data-area="C"] .cni-alumno-header-examen:hover { background: #fff5ee; border-color: #c36438; }
+.cni-alumno[data-area="C"] .cni-alumno-avatar { background: #fff0e5; color: #9a3b12; border: 1px solid #f0d7c4; }
+.cni-alumno[data-area="C"] .cni-alumno-top-profile { min-width: 0; }
+.cni-alumno[data-area="C"] .cni-alumno-top-profile strong { max-width: 210px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.cni-alumno[data-area="C"] .cni-alumno-content { width: 100%; max-width: 1440px; margin: 0 auto; padding: 30px 32px 48px; }
+.cni-alumno[data-area="C"] .cni-alumno-vista-perfil { min-width: 0; }
+.unfv-hero { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 32px; align-items: center; overflow: hidden; margin: 0; padding: 34px 36px; border: 1px solid #efdccd; border-radius: 22px; background: #fff5ed; }
+.unfv-hero-copy { min-width: 0; }
+.unfv-eyebrow { display: inline-flex; align-items: center; gap: 8px; color: #934018; font-size: 10px; letter-spacing: .13em; font-weight: 800; }
+.unfv-eyebrow > span { width: 6px; height: 6px; flex: none; border-radius: 50%; background: #b94d20; }
+.unfv-hero h1 { margin: 15px 0 12px; font-size: clamp(28px, 3vw, 43px); line-height: 1.16; letter-spacing: -.045em; font-weight: 800; overflow-wrap: anywhere; color: #203348; }
+.unfv-hero h1 > span { color: #a6461d; }
+.unfv-hero h2 { margin: 0 0 7px; font-size: 16px; font-weight: 700; color: #26394b; }
+.unfv-hero-copy > p { max-width: 510px; font-size: 14px; line-height: 1.7; color: #657180; }
+.unfv-hero-facts { display: flex; flex-wrap: wrap; gap: 0; margin-top: 26px; }
+.unfv-hero-facts > div { min-width: 0; padding-right: 24px; margin-right: 24px; border-right: 1px solid #e7d8cc; }
+.unfv-hero-facts > div:last-child { border: 0; margin: 0; padding: 0; }
+.unfv-hero-facts strong { display: block; white-space: nowrap; font-size: 27px; line-height: 1.2; font-weight: 800; letter-spacing: -.04em; color: #293b4b; }
+.unfv-hero-facts strong small { font-size: 15px; font-weight: 650; letter-spacing: 0; }
+.unfv-hero-facts span { display: block; margin-top: 5px; color: #68665f; font-size: 11px; }
+.unfv-emblem { display: flex; flex-direction: column; align-items: center; align-self: stretch; justify-content: center; gap: 12px; min-width: 0; margin: 0; padding: 16px; background: #192e42; border: 1px solid #273e54; border-radius: 18px; }
+.unfv-emblem img { display: block; width: 116px; height: 174px; object-fit: contain; border-radius: 6px; }
+.unfv-emblem figcaption { color: #f5e9e0; text-align: center; font-size: 9px; font-weight: 700; letter-spacing: .1em; }
+.unfv-emblem figcaption span { display: block; margin-top: 5px; color: #b7c4d0; letter-spacing: 0; font-weight: 400; font-size: 11px; }
+.unfv-profile-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(240px, 1fr); gap: 20px; margin-top: 24px; }
+.unfv-exam-card, .unfv-summary-card { min-width: 0; padding: 26px; border: 1px solid var(--line); border-radius: 18px; background: #fff; box-shadow: 0 4px 16px #162b4003; }
+.unfv-card-heading { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.unfv-card-heading h2 { margin: 0; color: var(--ink); font-size: 18px; line-height: 1.35; font-weight: 750; letter-spacing: -.025em; }
+.unfv-card-heading .unfv-eyebrow { margin: 0 0 3px; font-size: 9px; }
+.unfv-card-icon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; border-radius: 12px; background: #fff2e9; color: #a74620; }
+.unfv-card-icon svg { display: block; width: 23px; height: 23px; }
+.unfv-year { margin-left: auto; border: 1px solid #e5e8ed; padding: 4px 9px; border-radius: 7px; color: #657485; font-size: 11px; font-weight: 650; }
+.unfv-card-description { margin: 18px 0 22px !important; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.unfv-help { margin: 10px 0 20px !important; color: #657485; font-size: 11px; line-height: 1.65; }
+.unfv-exam-format { display: flex; flex-wrap: wrap; gap: 8px; padding: 2px 0 12px; }
+.unfv-exam-format span { display: inline-flex; gap: 4px; align-items: center; min-height: 32px; padding: 5px 10px; border: 1px solid #e7ebf0; border-radius: 7px; color: #5a6c7d; font-size: 11px; }
+.unfv-exam-format strong { color: #263c50; font-weight: 750; }
+.unfv-start { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; min-height: 50px; padding: 13px 18px; background: #b94d20; border: 1px solid #b94d20; border-radius: 10px; color: #fff; font-size: 14px; font-weight: 700; box-shadow: 0 4px 9px #a7462017; transition: background .15s ease; }
+.unfv-start:hover { background: #923b17; border-color: #923b17; }
+.unfv-start span { font-size: 21px; line-height: 1; }
+.unfv-source { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; margin-top: 8px; color: #657485 !important; font-size: 11px; text-decoration: underline !important; text-underline-offset: 3px; }
+.unfv-summary-card { display: flex; flex-direction: column; }
+.unfv-summary-card .unfv-card-icon { background: #edf4f8; color: #405f78; }
+.unfv-summary-number { display: flex; align-items: center; gap: 16px; margin: 28px 0 20px; }
+.unfv-summary-number > strong { font-size: 52px; line-height: 1; font-weight: 750; letter-spacing: -.06em; color: #263c50; }
+.unfv-summary-number > span { font-size: 12px; line-height: 1.5; font-weight: 650; color: #45576a; }
+.unfv-summary-number small { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; color: #6e7c89; }
+.unfv-summary-empty { margin: 0 0 20px !important; padding: 16px; background: #f7f9fc; border-radius: 10px; color: #657485; font-size: 12px; line-height: 1.75; }
+.unfv-last-result { margin-bottom: 20px; padding: 16px; border-radius: 10px; background: #f7f9fc; }
+.unfv-last-result > span { font-size: 12px; color: #657485; }
+.unfv-last-result strong { display: block; margin-top: 6px; font-size: 24px; color: #263c50; }
+.unfv-last-result small { font-weight: 400; font-size: 11px; color: #657485; }
+.unfv-summary-link { display: flex; align-items: center; justify-content: space-between; min-height: 44px; margin-top: auto; border-top: 1px solid var(--line); padding-top: 14px; font-weight: 700; font-size: 12px; color: #9a401c !important; }
+.cni-alumno[data-area="C"] .unfv-student-card { margin: 24px 0 0; padding: 25px 26px; border: 1px solid var(--line); border-radius: 18px; box-shadow: none; }
+.cni-alumno[data-area="C"] .unfv-student-card h2 { font-size: 18px; }
+.cni-alumno[data-area="C"] .cni-alumno-datos-grid { grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.3fr) repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 24px; }
+.cni-alumno[data-area="C"] .cni-alumno-datos-grid dt { font-size: 11px; color: #6b7887; }
+.cni-alumno[data-area="C"] .cni-alumno-datos-grid dd { margin: 5px 0 0; font-size: 13px; font-weight: 650; color: var(--ink); overflow-wrap: anywhere; }
+.cni-alumno[data-area="C"] .cni-historial-tarjeta, .cni-alumno[data-area="C"] .cni-progreso-grafica { border: 1px solid var(--line); border-radius: 18px; box-shadow: none; }
+.cni-alumno[data-area="C"] .cni-historial-cabecera { align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+.cni-alumno[data-area="C"] .cni-historial-filtros { flex: 1; min-width: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cni-alumno[data-area="C"] .cni-historial-filtros :where(input, select, button) { min-height: 44px; height: auto; }
+.cni-alumno[data-area="C"] .cni-historial-tabla-marco { width: 100%; max-width: 100%; overflow-x: auto; }
+.cni-alumno[data-area="C"] .cni-historial-tabla th, .cni-alumno[data-area="C"] .cni-historial-tabla td { padding: 17px 15px; }
+.cni-alumno[data-area="C"] .cni-historial-tabla th:nth-child(3), .cni-alumno[data-area="C"] .cni-historial-tabla td:nth-child(3) { min-width: 180px; max-width: 280px; white-space: normal; overflow-wrap: anywhere; }
+.cni-alumno[data-area="C"] .cni-historial-resultado { display: inline-flex; align-items: center; min-height: 44px; }
+.unfv-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.unfv-skip { position: fixed; top: -100px; left: 20px; z-index: 60; padding: 12px 18px; color: #fff; background: #192e42; border-radius: 8px; }
+.unfv-skip:focus { top: 12px; }
+body:has(.unfv-menu-modal) { overflow: hidden; }
+@media (max-width: 1200px) {
+    .cni-alumno[data-area="C"] .cni-alumno-content { padding: 24px; }
+    .unfv-hero { grid-template-columns: minmax(0, 1fr) 160px; gap: 20px; padding: 28px; }
+    .unfv-hero-facts > div { padding-right: 16px; margin-right: 16px; }
+    .unfv-profile-grid { grid-template-columns: minmax(0, 1.3fr) minmax(230px, 1fr); gap: 16px; }
+    .unfv-exam-card, .unfv-summary-card { padding: 22px; }
+}
+@media (max-width: 900px) {
+    .cni-alumno[data-area="C"] .cni-alumno-sidebar,
+    .cni-alumno[data-area="C"].is-sidebar-collapsed .cni-alumno-sidebar { position: fixed; z-index: 32; inset: 0 auto 0 0; width: min(286px, 86vw); height: 100dvh; padding: 24px 16px; visibility: hidden; pointer-events: none; transform: translateX(-102%); overflow-y: auto; transition: transform .2s ease, visibility .2s ease; }
+    .cni-alumno[data-area="C"].is-sidebar-open .cni-alumno-sidebar { visibility: visible; pointer-events: auto; transform: translateX(0); }
+    .cni-alumno[data-area="C"] .cni-alumno-sidebar-backdrop:not([hidden]) { display: block; position: fixed; z-index: 31; inset: 0; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; background: #10253799; }
+    .cni-alumno[data-area="C"] .cni-alumno-sidebar-toggle { left: 16px; top: 20px; min-width: 44px; padding: 0 10px; }
+    .cni-alumno[data-area="C"] .cni-alumno-sidebar-toggle-text { display: none; }
+    .cni-alumno[data-area="C"] .cni-alumno-topbar,
+    .cni-alumno[data-area="C"].is-sidebar-collapsed .cni-alumno-topbar { padding-left: 76px; padding-right: 24px; }
+    .cni-alumno[data-area="C"] .cni-alumno-marca { display: flex; }
+    .cni-alumno[data-area="C"] .cni-alumno-marca > span:last-child { font-size: 14px; }
+    .cni-alumno[data-area="C"] .cni-alumno-area-chip { display: flex; }
+    .cni-alumno[data-area="C"] .cni-alumno-menu a { justify-content: flex-start; max-width: none; width: 100%; }
+    .cni-alumno[data-area="C"] .cni-alumno-sidebar-bottom { display: block; }
+}
+@media (max-width: 680px) {
+    .cni-alumno[data-area="C"] .cni-alumno-content { padding: 20px 16px 32px; }
+    .cni-alumno[data-area="C"] .cni-alumno-topbar,
+    .cni-alumno[data-area="C"].is-sidebar-collapsed .cni-alumno-topbar { min-height: 78px; flex-wrap: nowrap; padding: 12px 16px 12px 74px; gap: 10px; }
+    .cni-alumno[data-area="C"] .cni-alumno-sidebar-toggle { top: 18px; }
+    .cni-alumno[data-area="C"] .cni-alumno-top-title { min-width: 0; }
+    .cni-alumno[data-area="C"] .cni-alumno-top-title strong { font-size: 18px; }
+    .cni-alumno[data-area="C"] .cni-alumno-topicon { display: none; }
+    .cni-alumno[data-area="C"] .cni-alumno-top-actions { width: auto; justify-content: flex-end; }
+    .cni-alumno[data-area="C"] .cni-alumno-header-examen-form { display: none; }
+    .cni-alumno[data-area="C"] .cni-alumno-top-profile > span:last-child { display: none; }
+    .cni-alumno[data-area="C"] .cni-alumno-top-profile > .cni-alumno-avatar { display: grid; width: 38px; height: 38px; font-size: 12px; }
+    .unfv-hero { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 25px 22px; border-radius: 18px; }
+    .unfv-hero h1 { font-size: clamp(27px, 7vw, 38px); }
+    .unfv-hero h2 { font-size: 15px; }
+    .unfv-hero-copy > p { font-size: 13px; }
+    .unfv-hero-facts { margin-top: 22px; flex-wrap: nowrap; }
+    .unfv-hero-facts > div { flex: 1; padding-right: 12px; margin-right: 12px; }
+    .unfv-hero-facts strong { font-size: 25px; }
+    .unfv-hero-facts span { font-size: 10px; }
+    .unfv-emblem { flex-direction: row; justify-content: flex-start; align-items: center; gap: 14px; margin-top: 24px; padding: 14px 16px; border-radius: 12px; }
+    .unfv-emblem img { width: 40px; height: 60px; }
+    .unfv-emblem figcaption { text-align: left; font-size: 10px; }
+    .unfv-profile-grid { grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 18px; }
+    .unfv-exam-card, .unfv-summary-card { padding: 22px 20px; border-radius: 16px; }
+    .unfv-card-heading h2 { font-size: 18px; }
+    .unfv-summary-number { margin: 22px 0 18px; }
+    .unfv-summary-number > strong { font-size: 42px; }
+    .cni-alumno[data-area="C"] .unfv-student-card { padding: 22px 20px; margin-top: 18px; border-radius: 16px; }
+    .cni-alumno[data-area="C"] .cni-alumno-datos-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 18px; }
+    .cni-alumno[data-area="C"] .cni-alumno-datos-grid > div:first-child { grid-column: 1 / -1; }
+    .cni-alumno[data-area="C"] .cni-historial-filtros { grid-template-columns: minmax(0, 1fr); flex-basis: 100%; }
+    .cni-alumno[data-area="C"] .cni-historial-filtros :where(input, select) { font-size: 16px; }
+    .cni-alumno[data-area="C"] .cni-historial-cabecera, .cni-alumno[data-area="C"] .cni-progreso-grafica-cabecera { align-items: flex-start; flex-direction: column; }
+    .cni-alumno[data-area="C"] .cni-progreso-grafica, .cni-alumno[data-area="C"] .cni-historial-tarjeta { padding: 20px 16px; }
+    .cni-alumno[data-area="C"] .cni-historial-vacio { white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .cni-alumno[data-area="C"] *, .cni-alumno[data-area="C"] *::before, .cni-alumno[data-area="C"] *::after { transition: none !important; scroll-behavior: auto !important; }
+}

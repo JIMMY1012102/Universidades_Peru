@@ -67,7 +67,7 @@ class PanelesPorAreaTest extends TestCase
             $respuesta->assertViewIs('alumno.panel')
                 ->assertSee('panel-alumno.css')
                 ->assertSee('Dar examen')
-                ->assertSee('Mascota del área de')
+                ->assertSee($codigo === 'C' ? 'Emblema de la Universidad Nacional Federico Villarreal' : 'Mascota del área de')
                 ->assertSee('href="#perfil"', false)
                 ->assertSee('href="#progreso"', false)
                 ->assertSee('href="#historial"', false);
@@ -146,7 +146,7 @@ class PanelesPorAreaTest extends TestCase
         $html = $this->get(route('alumno.panel'))->assertOk()->getContent();
 
         $this->assertStringContainsString('id="perfil" data-panel-view="perfil"', $html);
-        $this->assertSame(1, preg_match_all('/class="cni-alumno-banner"/', $html));
+        $this->assertSame(1, preg_match_all('/class="unfv-hero"/', $html));
         $this->assertStringContainsString('Datos del alumno', $html);
         $this->assertStringContainsString('href="#perfil" class="is-active"', $html);
         $this->assertStringContainsString('id="progreso" data-panel-view="progreso"', $html);
