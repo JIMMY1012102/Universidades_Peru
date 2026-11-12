@@ -56,7 +56,7 @@ class ExamenIndependienteTest extends TestCase
         }
     }
 
-    public function test_cada_area_genera_cien_preguntas_con_sus_cuotas_y_el_orden_acordado(): void
+    public function test_cada_area_genera_las_cuotas_y_el_orden_de_su_formato(): void
     {
         $this->banco();
         foreach (PerfilExamenCni::DISTRIBUCION as $codigo => $cuotas) {
@@ -66,19 +66,24 @@ class ExamenIndependienteTest extends TestCase
                 ->assertRedirect();
             $intento = DB::table('intentos')->where('usuario_id', $alumno->id)->first();
             $this->assertNotNull($intento);
-            $this->assertSame(100, (int) $intento->total_preguntas);
+            $cuotas = $codigo === 'C' ? \App\Support\PerfilExamenUnfv::CUOTAS['ingenierias'] : $cuotas;
+            $total = array_sum($cuotas);
+            $this->assertSame($total, (int) $intento->total_preguntas);
             $this->assertEquals(
-                \Illuminate\Support\Carbon::parse($intento->fecha_inicio)->addMinutes(60),
+                \Illuminate\Support\Carbon::parse($intento->fecha_inicio)->addMinutes($codigo === 'C' ? 90 : 60),
                 \Illuminate\Support\Carbon::parse($intento->fecha_limite)
             );
             $preguntas = app(IntentoService::class)->preguntas($intento->id);
-            $this->assertCount(100, $preguntas->pluck('id')->unique());
-            $posiciones = $preguntas->map(fn ($p) => PerfilExamenCni::posicion($p->area))->all();
+            $this->assertCount($total, $preguntas->pluck('id')->unique());
+            $posiciones = $preguntas->map(fn ($p) => $codigo === 'C' ? \App\Support\PerfilExamenUnfv::posicion($p->area) : PerfilExamenCni::posicion($p->area))->all();
             $ordenadas = $posiciones;
             sort($ordenadas);
             $this->assertSame($ordenadas, $posiciones);
             foreach ($cuotas as $prefijo => $cantidad) {
-                $this->assertCount($cantidad, $preguntas->where('area', PerfilExamenCni::CURSOS[$prefijo][0]));
+                $grupo = $codigo === 'C' && $prefijo === 'HP'
+                    ? $preguntas->whereIn('area', ['Historia del Perú', 'Historia Universal'])
+                    : $preguntas->where('area', PerfilExamenCni::CURSOS[$prefijo][0]);
+                $this->assertCount($cantidad, $grupo);
             }
             $this->assertDatabaseHas('area_postulacion_simulacro', [
                 'simulacro_id' => $intento->simulacro_id, 'area_postulacion_id' => $alumno->area_postulacion_id,
@@ -91,7 +96,7 @@ class ExamenIndependienteTest extends TestCase
     public function test_reanuda_sin_resortear_ni_reiniciar_el_tiempo_y_luego_permite_otro_intento(): void
     {
         $this->banco();
-        $alumno = $this->alumno('C');
+        $alumno = $this->alumno('A');
         $servicio = app(ExamenIndependienteService::class);
         $primero = $servicio->iniciar($alumno);
         $preguntas = app(IntentoService::class)->preguntas($primero->id);
@@ -106,7 +111,7 @@ class ExamenIndependienteTest extends TestCase
         $this->assertNotSame($preguntas->pluck('id')->all(), app(IntentoService::class)->preguntas($nuevo->id)->pluck('id')->all());
         $this->assertDatabaseCount('simulacros', 1);
 
-        $otro = $this->alumno('C', 'otro');
+        $otro = $this->alumno('A', 'otro');
         $ajeno = $servicio->iniciar($otro);
         $this->assertNotSame($nuevo->id, $ajeno->id);
         $this->actingAs($otro, 'web')->get(route('examen', $nuevo->id))->assertNotFound();
@@ -115,7 +120,7 @@ class ExamenIndependienteTest extends TestCase
     public function test_si_el_banco_es_insuficiente_no_deja_un_intento_incompleto(): void
     {
         $this->banco();
-        $alumno = $this->alumno('C');
+        $alumno = $this->alumno('A');
         DB::table('preguntas')->whereIn('tema_id', DB::table('temas')
             ->whereIn('area_id', DB::table('areas')->where('nombre', 'Física')->select('id'))->select('id'))
             ->update(['activo' => false]);
@@ -130,7 +135,7 @@ class ExamenIndependienteTest extends TestCase
     public function test_sin_banco_muestra_error_y_solo_estudiantes_activos_pueden_iniciar(): void
     {
         $this->post(route('examen.independiente'))->assertRedirect(route('login'));
-        $alumno = $this->alumno('C');
+        $alumno = $this->alumno('A');
         $this->actingAs($alumno, 'web')->from(route('alumno.panel'))
             ->post(route('examen.independiente'))->assertRedirect(route('examen.vacio'));
         $this->assertDatabaseCount('intentos', 0);
@@ -147,7 +152,7 @@ class ExamenIndependienteTest extends TestCase
     }
     public function test_el_banco_vacio_abre_la_misma_pantalla_sin_crear_intentos_y_luego_el_excel_permite_un_examen_real(): void
     {
-        $alumno = $this->alumno('C');
+        $alumno = $this->alumno('A');
         $this->actingAs($alumno, 'web')->post(route('examen.independiente'))
             ->assertRedirect(route('examen.vacio'));
         $this->get(route('examen.vacio'))->assertOk()
@@ -184,7 +189,7 @@ class ExamenIndependienteTest extends TestCase
     public function test_la_pantalla_vacia_tambien_exige_una_sesion_de_estudiante(): void
     {
         $this->get(route('examen.vacio'))->assertRedirect(route('login'));
-        $docente = $this->alumno('C');
+        $docente = $this->alumno('A');
         $docente->update(['rol' => 'docente']);
         $this->actingAs($docente, 'web')->get(route('examen.vacio'))->assertForbidden();
     }
@@ -192,7 +197,7 @@ class ExamenIndependienteTest extends TestCase
     public function test_el_examen_independiente_se_cierra_al_cumplir_una_hora(): void
     {
         $this->banco();
-        $alumno = $this->alumno('C');
+        $alumno = $this->alumno('A');
         $primero = app(ExamenIndependienteService::class)->iniciar($alumno);
         $this->travel(59)->minutes();
         $this->assertSame('en_curso', app(IntentoService::class)->obtenerPropio($primero->id, $alumno->id)->estado);
